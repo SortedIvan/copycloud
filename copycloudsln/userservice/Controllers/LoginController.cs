@@ -46,7 +46,7 @@ namespace userservice.Controllers
 
         }
 
-        [Authorize]
+        [Authorize(Roles = "User")]
         [HttpGet("api/auth/test")]
         public async Task<bool> test()
         {
