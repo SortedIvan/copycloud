@@ -18,23 +18,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddScheme<AuthenticationSchemeOptions, FirebaseAuthenticationHandler>(JwtBearerDefaults.AuthenticationScheme, (o) => { }
-    ).AddCookie(x =>
+    .AddScheme<AuthenticationSchemeOptions, FirebaseAuthenticationHandler>(JwtBearerDefaults.AuthenticationScheme, (o) => 
     {
-        x.Cookie.Name = "token";
-    }).AddJwtBearer(options =>
-    {
-        options.RequireHttpsMetadata = false;
-        options.SaveToken = true;
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
-            .GetBytes(builder.Configuration.GetSection("CookieSettings:cookieToken").Value)),
-            ValidateIssuer = false,
-            ValidateAudience = false
-        };
-        options.Events = new JwtBearerEvents
+        o.Events = new JwtBearerEvents
         {
             OnMessageReceived = context =>
             {
@@ -42,14 +28,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 return Task.CompletedTask;
             }
         };
+    }
+    ).AddCookie(x =>
+    {
+        x.Cookie.Name = "token";
     });
-
-
-
-
-
-
-
 
 
 

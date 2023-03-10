@@ -16,19 +16,28 @@ namespace authservice.Auth
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            if (!Context.Request.Headers.ContainsKey("Authorization"))
+            string token = "";
+            bool cookieAuth = false;
+            if (Context.Request.Cookies.ContainsKey("token"))
             {
-                return AuthenticateResult.NoResult();
+                token = Context.Request.Cookies["token"];
+                cookieAuth = true;
             }
-
-            string bearerToken = Context.Request.Headers["Authorization"];
-
-            if (string.IsNullOrEmpty(bearerToken) && !bearerToken.StartsWith("Bearer "))
+            else
             {
-                return AuthenticateResult.Fail("Invalid token.");
-            }
+                if (!Context.Request.Headers.ContainsKey("Authorization"))
+                {
+                    return AuthenticateResult.NoResult();
+                }
+                string bearerToken = Context.Request.Headers["Authorization"];
 
-            string token = bearerToken.Substring("Bearer ".Length);
+                if (string.IsNullOrEmpty(bearerToken) && !bearerToken.StartsWith("Bearer "))
+                {
+                    return AuthenticateResult.Fail("Invalid token.");
+                }
+
+                token = bearerToken.Substring("Bearer ".Length);
+            }
 
             try
             {
@@ -49,11 +58,11 @@ namespace authservice.Auth
 
         private IEnumerable<Claim> ToClaims(IReadOnlyDictionary<string, object> claims)
         {
-            return new List<Claim> 
+            return new List<Claim>
             {
                 new Claim("id", claims["user_id"].ToString()),
                 new Claim("email", claims["email"].ToString()),
-                new Claim("email", claims["name"].ToString())
+                new Claim(ClaimTypes.Role, "User")
             };
         }
      

@@ -1,6 +1,7 @@
 ﻿using Firebase.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Refit;
+using System.Diagnostics;
 
 namespace userservice.Controllers
 {
@@ -16,16 +17,18 @@ namespace userservice.Controllers
 
             FirebaseAuthLink firebaseAuthLink = await _provider.SignInWithEmailAndPasswordAsync(username, password);
 
-            IAuthService authService = RestService.For<IAuthService>("https://localhost:5000/api/testcontroller");
-            string secret_data = await authService.GetAuthService(firebaseAuthLink.FirebaseToken);
+            IAuthService authService = RestService.For<IAuthService>("https://localhost:5000/api/authenticate_cookie");
 
-            return Ok(secret_data);
+            bool result = await authService.GetAuthService(firebaseAuthLink.FirebaseToken);
+
+
+            return Ok(result);
         }
 
         public interface IAuthService
         {
             [Get("/")]
-            Task<string> GetAuthService([Authorize("Bearer")] string token);
+            Task<bool> GetAuthService([Authorize("Bearer")] string token);
         }
     }
 }
