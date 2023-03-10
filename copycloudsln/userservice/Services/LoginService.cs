@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using Refit;
+using userservice.Dto;
 
 namespace userservice.Services
 {
@@ -15,10 +16,10 @@ namespace userservice.Services
             firebaseProvider = new FirebaseAuthProvider(new FirebaseConfig(_config.GetSection("FirebaseSettings:firebase_api_key").Value));
         }
 
-        public async Task<FirebaseAuthLink> Login(string username, string password)
+        public async Task<FirebaseAuthLink> Login(UserDtoLogin loginDto)
         {
             // TODO: Exception handling
-            FirebaseAuthLink firebaseAuthLink = await firebaseProvider.SignInWithEmailAndPasswordAsync(username, password);
+            FirebaseAuthLink firebaseAuthLink = await firebaseProvider.SignInWithEmailAndPasswordAsync(loginDto.Email, loginDto.Password);
             return firebaseAuthLink;
         }
 

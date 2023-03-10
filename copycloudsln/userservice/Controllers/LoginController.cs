@@ -1,6 +1,7 @@
 ﻿using Firebase.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using userservice.Dto;
 using userservice.Services;
 
 namespace userservice.Controllers
@@ -15,10 +16,25 @@ namespace userservice.Controllers
         }
 
         [HttpPost("/api/login")]
-        public async Task<IActionResult> Login(string username, string password)
+        public async Task<IActionResult> Login(UserDtoLogin userDto)
         {
-            FirebaseAuthLink firebaseAuth = await loginService.Login(username, password);
+            FirebaseAuthLink firebaseAuth = await loginService.Login(userDto);
 
+            if (!firebaseAuth.User.IsEmailVerified)
+            {
+                return BadRequest("Please verify your email before using the application.");
+            }
+
+            if (userDto.Email == "")
+            {
+                return BadRequest("Please provide an email.");
+            } 
+
+            if (userDto.Password == "")
+            {
+                return BadRequest("Please provide a valid password.");
+            }
+            
             // Append the id token, short-lived
             HttpContext.Response.Cookies.Append("token", firebaseAuth.FirebaseToken.ToString(),
                 new CookieOptions
