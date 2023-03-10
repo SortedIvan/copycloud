@@ -7,7 +7,7 @@ namespace authservice.Controllers
     public class AuthControlelr : ControllerBase
     {
         [Authorize]
-        [HttpGet("api/authenticate_cookie")]
+        [HttpGet("api/auth/authenticate_cookie")]
         public async Task<bool> SetHttpOnlyCookie(string token)
         {
             HttpContext.Response.Cookies.Append("token", token,
@@ -23,7 +23,7 @@ namespace authservice.Controllers
         }
 
         [Authorize]
-        [HttpGet("api/test")]
+        [HttpGet("api/auth/test")]
         public async Task<bool> test()
         {
             return true;

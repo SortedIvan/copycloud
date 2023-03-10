@@ -36,7 +36,7 @@ namespace userservice.Controllers
 
                 return BadRequest(ex.Message);
             }
-            return Ok();
+            return Ok("Please verify your email to start using the application!");
         }
     }
 }

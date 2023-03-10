@@ -1,34 +1,57 @@
 ﻿using Firebase.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Refit;
-using System.Diagnostics;
+using userservice.Services;
 
 namespace userservice.Controllers
 {
     [ApiController]
     public class LoginController : ControllerBase
     {
+        private ILoginService loginService;
+        public LoginController(ILoginService _loginService)
+        {
+            loginService = _loginService;
+        }
+
         [HttpPost("/api/login")]
         public async Task<IActionResult> Login(string username, string password)
         {
+            FirebaseAuthLink firebaseAuth = await loginService.Login(username, password);
 
-            var api_key = "AIzaSyCHIW7gTKmEBTS5EbO7-KAkk-q6p6rw0QU\r\n";
-            FirebaseAuthProvider _provider = new FirebaseAuthProvider(new FirebaseConfig(api_key));
+            // Append the id token, short-lived
+            HttpContext.Response.Cookies.Append("token", firebaseAuth.FirebaseToken.ToString(),
+                new CookieOptions
+                {
+                    Expires = DateTime.Now.AddMinutes(30),
+                    HttpOnly = true,
+                    Secure = true,
+                    IsEssential = true,
+                    SameSite = SameSiteMode.None
+                });
 
-            FirebaseAuthLink firebaseAuthLink = await _provider.SignInWithEmailAndPasswordAsync(username, password);
+            // Append the access token, long-lived
+            HttpContext.Response.Cookies.Append("rtoken", firebaseAuth.RefreshToken.ToString(),
+                new CookieOptions
+                {
+                    Expires = DateTime.Now.AddMinutes(30),
+                    HttpOnly = true,
+                    Secure = true,
+                    IsEssential = true,
+                    SameSite = SameSiteMode.None,
+                    
+                });
 
-            IAuthService authService = RestService.For<IAuthService>("https://localhost:5000/api/authenticate_cookie");
+            return Ok("User logged in.");
 
-            bool result = await authService.GetAuthService(firebaseAuthLink.FirebaseToken);
-
-
-            return Ok(result);
         }
 
-        public interface IAuthService
+        [Authorize]
+        [HttpGet("api/auth/test")]
+        public async Task<bool> test()
         {
-            [Get("/")]
-            Task<bool> GetAuthService([Authorize("Bearer")] string token);
+            return true;
         }
+
     }
 }

@@ -7,23 +7,21 @@ namespace userservice.Services
     public class RegisterService : IRegisterService
     {
         private readonly IConfiguration config;
-        private string api_key;
-        private FirebaseAuthProvider mongoProvider;
+        private FirebaseAuthProvider firebaseProvider;
 
         public RegisterService(IConfiguration _config)
         {
             this.config = _config;
-            api_key = "AIzaSyCHIW7gTKmEBTS5EbO7-KAkk-q6p6rw0QU\r\n";
-            mongoProvider = new FirebaseAuthProvider(new FirebaseConfig(api_key));
+            firebaseProvider = new FirebaseAuthProvider(new FirebaseConfig(_config.GetSection("FirebaseSettings:firebase_api_key").Value));
         } 
 
         public async Task RegisterUser(string username, string password)
         {
             try
             {
-                FirebaseAuthLink firebaseAuthLink = await mongoProvider.CreateUserWithEmailAndPasswordAsync(username, password);
-                IAuthService authService = RestService.For<IAuthService>("http://localhost:5000/api/testcontroller");
-                Debug.WriteLine(await authService.GetAuthService(firebaseAuthLink.FirebaseToken));
+                FirebaseAuthLink firebaseAuthLink = await firebaseProvider.CreateUserWithEmailAndPasswordAsync(username, password);
+                // Here, send a message to the email service to confirm the user's email
+                await firebaseProvider.SendEmailVerificationAsync(firebaseAuthLink);
             }
             catch (Exception ex)
             {
