@@ -1,6 +1,11 @@
-﻿using Firebase.Auth;
+﻿using DnsClient;
+using Firebase.Auth;
+using Microsoft.AspNetCore.Identity;
 using Refit;
 using System.Diagnostics;
+using userservice.Database;
+using userservice.Dto;
+using userservice.Models;
 
 namespace userservice.Services
 {
@@ -8,37 +13,33 @@ namespace userservice.Services
     {
         private readonly IConfiguration config;
         private FirebaseAuthProvider firebaseProvider;
+        private readonly IUserDbConfig userDbConfig;
 
-        public RegisterService(IConfiguration _config)
+        public RegisterService(IConfiguration _config, IUserDbConfig _userDbConfig)
         {
             this.config = _config;
             firebaseProvider = new FirebaseAuthProvider(new FirebaseConfig(_config.GetSection("FirebaseSettings:firebase_api_key").Value));
-        } 
-
-        public async Task RegisterUser(string username, string password)
-        {
-            try
-            {
-                FirebaseAuthLink firebaseAuthLink = await firebaseProvider.CreateUserWithEmailAndPasswordAsync(username, password);
-                // Here, send a message to the email service to confirm the user's email
-                await firebaseProvider.SendEmailVerificationAsync(firebaseAuthLink);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-            }
-
+            this.userDbConfig = _userDbConfig;
         }
 
-        public interface IAuthService
+
+        public async Task RegisterUser(UserDtoRegister userDto)
         {
-            [Get("/")]
-            Task<string> GetAuthService([Authorize("Bearer")] string token);
+            FirebaseAuthLink firebaseAuthLink = await firebaseProvider.CreateUserWithEmailAndPasswordAsync(userDto.Email, userDto.Password);
+            await SaveUserDb(userDto);
+            // Here, send a message to the email service to confirm the user's email
+            await firebaseProvider.SendEmailVerificationAsync(firebaseAuthLink);
         }
 
-        private void CreateUserDb(string username, string password)
+        private async Task SaveUserDb(UserDtoRegister userDto)
         {
-
+            await userDbConfig.GetUserCollection().InsertOneAsync(
+                new Models.User
+                {
+                    UserEmail = userDto.Email,
+                    UserName = userDto.Name,
+                });
+            
         }
     }
 }

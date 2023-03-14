@@ -12,7 +12,7 @@ namespace userservice.Models
         [BsonElement("useremail")]
         public string UserEmail { get; set; } = string.Empty;
 
-        [BsonElement]
+        [BsonElement("username")]
         public string UserName { get; set; } = string.Empty;
     }
 }

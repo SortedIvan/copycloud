@@ -1,6 +1,7 @@
 ﻿using Firebase.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Refit;
+using userservice.Dto;
 using userservice.Services;
 
 namespace userservice.Controllers
@@ -14,11 +15,11 @@ namespace userservice.Controllers
 
 
         [HttpPost("/api/register")]
-        public async Task<IActionResult> Register(string username, string password)
+        public async Task<IActionResult> Register(UserDtoRegister userDto)
         {   
             try
             {
-                await registerService.RegisterUser(username, password);
+                await registerService.RegisterUser(userDto);
             }
             catch (FirebaseAuthException ex)
             {

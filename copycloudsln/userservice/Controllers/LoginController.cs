@@ -50,7 +50,7 @@ namespace userservice.Controllers
             HttpContext.Response.Cookies.Append("rtoken", firebaseAuth.RefreshToken.ToString(),
                 new CookieOptions
                 {
-                    Expires = DateTime.Now.AddMinutes(30),
+                    Expires = DateTime.Now.AddMinutes(120),
                     HttpOnly = true,
                     Secure = true,
                     IsEssential = true,
