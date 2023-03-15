@@ -1,0 +1,13 @@
+{
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/api/login",
+      "UpstreamHttpMethod": [ "Get" ],
+    
+      "DownstreamScheme": "http"
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl":  "http://localhost:9000"
+  }
+}

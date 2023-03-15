@@ -1,0 +1,19 @@
+version: '3.4'
+
+services:
+    userservice:
+      image: ${DOCKER_REGISTRY-}userservice
+      build:
+        context: .\userservice
+      ports:
+        - "9000:80"
+      environment:
+        - GOOGLE_APPLICATION_CREDENTIALS=firebase-config.json
+    contentservice:
+      image: ${DOCKER_REGISTSTRY-}contentservice
+      build:
+        context: .\contentservice
+      ports:
+       - "9001:80"
+      environment:
+        - GOOGLE_APPLICATION_CREDENTIALS=firebase-config.json

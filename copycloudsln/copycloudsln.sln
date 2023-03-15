@@ -5,7 +5,11 @@ VisualStudioVersion = 17.4.33403.182
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "userservice", "userservice\userservice.csproj", "{04316085-E2D2-44E2-8A4F-369DF65F3575}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "contentservice", "contentservice\contentservice.csproj", "{62E81234-3C22-4434-808B-9EB24A48CDB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "contentservice", "contentservice\contentservice.csproj", "{62E81234-3C22-4434-808B-9EB24A48CDB7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIGateway", "APIGateway\APIGateway.csproj", "{51141F64-351A-40CA-A560-F651C44D299B}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{55C5BB3E-5224-4A06-BFEE-7F4CC786C8F9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{62E81234-3C22-4434-808B-9EB24A48CDB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62E81234-3C22-4434-808B-9EB24A48CDB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62E81234-3C22-4434-808B-9EB24A48CDB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51141F64-351A-40CA-A560-F651C44D299B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51141F64-351A-40CA-A560-F651C44D299B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51141F64-351A-40CA-A560-F651C44D299B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51141F64-351A-40CA-A560-F651C44D299B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55C5BB3E-5224-4A06-BFEE-7F4CC786C8F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55C5BB3E-5224-4A06-BFEE-7F4CC786C8F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55C5BB3E-5224-4A06-BFEE-7F4CC786C8F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55C5BB3E-5224-4A06-BFEE-7F4CC786C8F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
