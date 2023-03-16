@@ -3,11 +3,44 @@
     {
       "UpstreamPathTemplate": "/api/login",
       "UpstreamHttpMethod": [ "Get" ],
-    
-      "DownstreamScheme": "http"
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "userservice",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/api/login"
+    },
+    {
+      "UpstreamPathTemplate": "/api/testgatewayuser",
+      "UpstreamHttpMethod": [ "Get" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "userservice",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/api/testgatewayuser"
+    },
+    {
+      "UpstreamPathTemplate": "/api/testgatewaycontent",
+      "UpstreamHttpMethod": [ "Get" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "contentservice",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/api/testgatewaycontent"
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl":  "http://localhost:9000"
+    "BaseUrl":  "http://localhost:800"
   }
 }

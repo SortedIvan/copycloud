@@ -12,7 +12,7 @@ RUN dotnet publish "contentservice.csproj" -c Release -o /publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 as final
 WORKDIR /app
-COPY --from=build /publish .
+COPY --from=build /publish . 
 ENTRYPOINT ["dotnet", "contentservice.dll"]
 
 

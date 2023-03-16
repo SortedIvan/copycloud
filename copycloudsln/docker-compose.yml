@@ -1,19 +1,35 @@
 version: '3.4'
 
+networks:
+    backend:
+
 services:
     userservice:
+      container_name: user-service
       image: ${DOCKER_REGISTRY-}userservice
       build:
         context: .\userservice
-      ports:
-        - "9000:80"
       environment:
         - GOOGLE_APPLICATION_CREDENTIALS=firebase-config.json
+      networks:
+        - backend
     contentservice:
-      image: ${DOCKER_REGISTSTRY-}contentservice
-      build:
-        context: .\contentservice
-      ports:
-       - "9001:80"
-      environment:
-        - GOOGLE_APPLICATION_CREDENTIALS=firebase-config.json
+        container_name: content-service
+        image: ${DOCKER_REGISTSTRY-}contentservice
+        build:
+            context: .\contentservice
+        networks:
+            - backend
+        environment:
+            - GOOGLE_APPLICATION_CREDENTIALS=firebase-config.json
+    apigateway:
+        container_name: api-gateway
+        image: ${DOCKER_REGISTRY-}apigateway
+        build:
+            context: .
+            dockerfile: APIGateway/Dockerfile
+        ports:
+            - 8001:80
+        networks:
+            - backend
+

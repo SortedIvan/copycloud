@@ -69,5 +69,10 @@ namespace userservice.Controllers
             return true;
         }
 
+        [HttpGet("/api/testgatewayuser")]
+        public async Task<string> TestGateway()
+        {
+            return "Userservice gateway works";
+        }
     }
 }
