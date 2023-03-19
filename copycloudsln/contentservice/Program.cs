@@ -1,4 +1,6 @@
 using contentservice.Auth;
+using contentservice.Services;
+using contentservice.Utility;
 using FirebaseAdmin;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -6,7 +8,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton(FirebaseApp.Create());
-// Add services to the container.
+
+// Initialize the open ai connection class
+builder.Services.AddSingleton<IOpenAIManager, OpenAIManager>();
+
+builder.Services.AddScoped<IWebsiteCopyService, WebsiteCopyService>();
+
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
