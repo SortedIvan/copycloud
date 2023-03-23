@@ -2,7 +2,7 @@
   "Routes": [
     {
       "UpstreamPathTemplate": "/api/login",
-      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamHttpMethod": [ "Post" ],
 
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -38,6 +38,19 @@
         }
       ],
       "DownstreamPathTemplate": "/api/testgatewaycontent"
+    },
+    {
+      "UpstreamPathTemplate": "/api/register",
+      "UpstreamHttpMethod": [ "Post" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "userservice",
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/api/register"
     }
   ],
   "GlobalConfiguration": {

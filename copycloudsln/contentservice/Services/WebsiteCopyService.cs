@@ -22,17 +22,9 @@ namespace contentservice.Services
 
             // Prepend the initial instructions
 
-            chatgptconvesation.AppendSystemMessage(
-                "You are going to generate call to action copywriting based on user input." +
-                "The parameters provided will the the action's goal, the action context, the action type, action tone and optional sample phrases." +
-                "Answer in a formatted way in a call to action copywrite style." +
-                "The max characters for each copy is: " + maxCharacters);
-            chatgptconvesation.AppendSystemMessage("The amount of different call to action copies you generate is: " + amount);
-            chatgptconvesation.AppendSystemMessage("Return your result in a json format. It should be an array of phrases");
-            chatgptconvesation.AppendSystemMessage("You will say nothing else but the call to action copywriting json array");
-
-            chatgptconvesation.AppendSystemMessage("Return your result in a json array format.");
-
+            chatgptconvesation.AppendSystemMessage("Generate call to action copywriting based on user input.");
+            chatgptconvesation.AppendSystemMessage($"Create a JSON object which enumerates a set of {amount} child objects, each one of which is a different call to action copy");
+            chatgptconvesation.AppendSystemMessage("Return nothing but the JSON object.");
 
             chatgptconvesation.AppendUserInput("The action goal is: " + actionGoal);
             chatgptconvesation.AppendUserInput("The action context is: " + actionContext);
