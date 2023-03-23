@@ -1,4 +1,7 @@
-﻿using System.Text.RegularExpressions;
+﻿using contentservice.Dto;
+using Newtonsoft.Json;
+using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 
 namespace contentservice.Utility
 {
@@ -9,6 +12,13 @@ namespace contentservice.Utility
             string[] phrases = Regex.Split(input, "||");
             return phrases;
         }
+
+        public static List<Copy> ParseCopy(string jsonString)
+        {
+            CopyData copyData = JsonConvert.DeserializeObject<CopyData>(jsonString);
+            return copyData.Copies;
+        }
+
 
     }
 }

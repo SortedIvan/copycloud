@@ -1,4 +1,5 @@
-﻿using contentservice.Utility;
+﻿using contentservice.Dto;
+using contentservice.Utility;
 using OpenAI_API.Chat;
 using System.Diagnostics;
 using System.Net.NetworkInformation;
@@ -16,15 +17,13 @@ namespace contentservice.Services
             openaiManager = aiManager;
         }
 
-        public async Task<string> GenerateCallToActionCopy(int amount, string actionGoal, string actionContext, string actionType, string tone, int maxCharacters, string[]? samplePhrases)
+        public async Task<string> GenerateAi(int amount, string actionGoal, string actionContext, string actionType, string tone, int maxCharacters, string[]? samplePhrases)
         {
             Conversation chatgptconvesation = openaiManager.CreateChatGptConversation();
-
             // Prepend the initial instructions
+            chatgptconvesation.AppendSystemMessage($"Generate {amount} call to action copywriting statements based on user input.");
+            chatgptconvesation.AppendSystemMessage(@"Return these statements as a JSON Object with the structure {'copies': [{'copy': 'copy_content'}]}. Do not return any non-json text or numbering");
 
-            chatgptconvesation.AppendSystemMessage("Generate call to action copywriting based on user input.");
-            chatgptconvesation.AppendSystemMessage($"Create a JSON object which enumerates a set of {amount} child objects, each one of which is a different call to action copy");
-            chatgptconvesation.AppendSystemMessage("Return nothing but the JSON object.");
 
             chatgptconvesation.AppendUserInput("The action goal is: " + actionGoal);
             chatgptconvesation.AppendUserInput("The action context is: " + actionContext);
@@ -42,48 +41,53 @@ namespace contentservice.Services
 
             chatgptconvesation.AppendUserInput("Here are some sample phrases: " + prependPhrases);
 
-            List<string> copies = new List<string>();
-            //string response = await chatgptconvesation.GetResponseFromChatbot();
-            string temp_phrase = "";
-            //while (true)
+            
+            string output = await chatgptconvesation.GetResponseFromChatbot();
+            return output;
+        }
+
+        public async Task<List<Copy>> GenerateCallToActionCopy(int amount, string actionGoal, string actionContext, string actionType, string tone, int maxCharacters, string[]? samplePhrases)
+        {
+            Conversation chatgptconvesation = openaiManager.CreateChatGptConversation();
+
+            // Prepend the initial instructions
+            chatgptconvesation.AppendSystemMessage($"Generate {amount} call to action copywriting statements based on user input.");
+            chatgptconvesation.AppendSystemMessage("Return these statements as a JSON Object with the structure {\"copies\": [{\"copy\": \"copy_content\"}]}. Do not return any non-json text or numbering");
+
+            chatgptconvesation.AppendUserInput("The action goal is: " + actionGoal);
+            chatgptconvesation.AppendUserInput("The action context is: " + actionContext);
+            chatgptconvesation.AppendUserInput("The action type is: " + actionType);
+            chatgptconvesation.AppendUserInput("Set the tone of the copy as: " + tone);
+
+            string prependPhrases = "";
+            if (samplePhrases != null)
+            {
+                for (int i = 0; i < samplePhrases.Length; i++)
+                {
+                    prependPhrases += samplePhrases[i];
+                }
+            }
+
+            chatgptconvesation.AppendUserInput("Here are some sample phrases: " + prependPhrases);
+
+            string output = await chatgptconvesation.GetResponseFromChatbot();
+
+            List<Copy> copy = ChatgptRegex.ParseCopy(output); // Parse the copy objects into seperate json objects
+
+
+            //for (int i = 0; i < copyContent.Count; i++)
             //{
-            //    try
+            //    copies.Add(new CopySuggestionDto
             //    {
-            //        response = 
-            //        break; // success!
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        Debug.WriteLine(e.Message);
-            //    }
+            //        Id = new Guid().ToString(),
+            //        Copy = copyContent.ElementAt(i).Copy,
+            //        CopyAction = actionType,
+            //        CopyContext = actionContext,
+            //        CopyTone = tone
+            //    });
             //}
 
-
-            //for (int i = 0; i < response.Length; i++)
-            //{
-            //    if (response[i] != ';')
-            //    {
-            //        temp_phrase += response[i];
-            //    }
-            //    else
-            //    {
-            //        copies.Append(temp_phrase);
-            //        temp_phrase = "";
-            //    }
-            //}
-
-            return await chatgptconvesation.GetResponseFromChatbot();
+            return copy;
         }
     }
 }
-
-
-
-//const promptText = `Given the article below, create a JSON object which enumerates a set of 5 child objects.                       
-//                        Each child object has a property named "q" and a property named "a".
-//                        For each child object assign to the property named "q" a question which has its answer in the article 
-//                        and to the property named "a" a short answer to this question.
-//                        The resulting JSON object should be in this format: [{"q":"string","a":"string"}].\n\n
-//                        The article:\n
-//                        ${ textToUse}\n\n
-//                        The JSON object:\n\n`;

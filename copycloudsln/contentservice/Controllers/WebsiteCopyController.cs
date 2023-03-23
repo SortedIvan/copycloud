@@ -1,4 +1,5 @@
-﻿using contentservice.Services;
+﻿using contentservice.Dto;
+using contentservice.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace contentservice.Controllers
@@ -13,12 +14,16 @@ namespace contentservice.Controllers
         }
 
         [HttpPost("/api/ctocopy")]
-        public async Task<string> GetCallToActionCopies(int amount, string actionGoal, string actionContext, string actionType, string tone, int maxCharacters, string[]? samplePhrases)
+        public async Task<List<Copy>> GetCallToActionCopies(int amount, string actionGoal, string actionContext, string actionType, string tone, int maxCharacters, string[]? samplePhrases)
         {
-            string copy = await websiteCopyService.GenerateCallToActionCopy(amount, actionGoal, actionContext, actionType, tone, maxCharacters, samplePhrases);
+            List<Copy> copy = await websiteCopyService.GenerateCallToActionCopy(amount, actionGoal, actionContext, actionType, tone, maxCharacters, samplePhrases);
             return copy;
         }
 
-
+        [HttpPost("/api/testctocopyai")]
+        public async Task<string> GetAiOutput(int amount, string actionGoal, string actionContext, string actionType, string tone, int maxCharacters, string[]? samplePhrases)
+        {
+            return await websiteCopyService.GenerateAi(amount, actionGoal, actionContext, actionType,tone, maxCharacters, samplePhrases);
+        }
     }
 }
