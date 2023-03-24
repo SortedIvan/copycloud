@@ -17,34 +17,6 @@ namespace contentservice.Services
             openaiManager = aiManager;
         }
 
-        public async Task<string> GenerateAi(int amount, string actionGoal, string actionContext, string actionType, string tone, int maxCharacters, string[]? samplePhrases)
-        {
-            Conversation chatgptconvesation = openaiManager.CreateChatGptConversation();
-            // Prepend the initial instructions
-            chatgptconvesation.AppendSystemMessage($"Generate {amount} call to action copywriting statements based on user input.");
-            chatgptconvesation.AppendSystemMessage(@"Return these statements as a JSON Object with the structure {'copies': [{'copy': 'copy_content'}]}. Do not return any non-json text or numbering");
-
-
-            chatgptconvesation.AppendUserInput("The action goal is: " + actionGoal);
-            chatgptconvesation.AppendUserInput("The action context is: " + actionContext);
-            chatgptconvesation.AppendUserInput("The action type is: " + actionType);
-            chatgptconvesation.AppendUserInput("Set the tone of the copy as: " + tone);
-
-            string prependPhrases = "";
-            if (samplePhrases != null)
-            {
-                for (int i = 0; i < samplePhrases.Length; i++)
-                {
-                    prependPhrases += samplePhrases[i];
-                }
-            }
-
-            chatgptconvesation.AppendUserInput("Here are some sample phrases: " + prependPhrases);
-
-            
-            string output = await chatgptconvesation.GetResponseFromChatbot();
-            return output;
-        }
 
         public async Task<List<Copy>> GenerateCallToActionCopy(int amount, string actionGoal, string actionContext, string actionType, string tone, int maxCharacters, string[]? samplePhrases)
         {
@@ -72,22 +44,9 @@ namespace contentservice.Services
 
             string output = await chatgptconvesation.GetResponseFromChatbot();
 
-            List<Copy> copy = ChatgptRegex.ParseCopy(output); // Parse the copy objects into seperate json objects
+            List<Copy> copies = ChatgptRegex.ParseCopy(output); // Parse the copy objects into seperate json objects
 
-
-            //for (int i = 0; i < copyContent.Count; i++)
-            //{
-            //    copies.Add(new CopySuggestionDto
-            //    {
-            //        Id = new Guid().ToString(),
-            //        Copy = copyContent.ElementAt(i).Copy,
-            //        CopyAction = actionType,
-            //        CopyContext = actionContext,
-            //        CopyTone = tone
-            //    });
-            //}
-
-            return copy;
+            return copies;
         }
     }
 }

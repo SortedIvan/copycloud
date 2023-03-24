@@ -20,10 +20,5 @@ namespace contentservice.Controllers
             return copy;
         }
 
-        [HttpPost("/api/testctocopyai")]
-        public async Task<string> GetAiOutput(int amount, string actionGoal, string actionContext, string actionType, string tone, int maxCharacters, string[]? samplePhrases)
-        {
-            return await websiteCopyService.GenerateAi(amount, actionGoal, actionContext, actionType,tone, maxCharacters, samplePhrases);
-        }
     }
 }
