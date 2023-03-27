@@ -1,8 +1,8 @@
 ﻿namespace contentservice.Dto
 {
-    public class CtoCopy
+    public class CtoCopyDto
     {
-        public string Id { get; set; } = string.Empty;
+        public string CopyId { get; set; } = string.Empty;
         public string Copy { get; set; } = string.Empty;
         public string CopyTone { get; set; } = string.Empty;
         public string CopyAction { get; set; } = string.Empty; 
@@ -16,7 +16,7 @@
 
     public class Copy
     {
-        public string CopyText { get; set; } = string.Empty;
+        public string copy { get; set; } = string.Empty;
     }
 
 
