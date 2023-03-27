@@ -1,6 +1,4 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-
-namespace userservice.Models
+﻿namespace userlibrary
 {
     [BsonIgnoreExtraElements]
     public class UserModel

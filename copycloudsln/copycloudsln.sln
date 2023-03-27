@@ -11,7 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIGateway", "APIGateway\AP
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{55C5BB3E-5224-4A06-BFEE-7F4CC786C8F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "emailservice", "..\emailservice\emailservice.csproj", "{71EAB2D8-84A8-436D-B884-A5328C820222}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "emailservice", "..\emailservice\emailservice.csproj", "{71EAB2D8-84A8-436D-B884-A5328C820222}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "userlibrary", "..\userlibrary\userlibrary.csproj", "{A2456986-C1A3-4C36-81AB-2B4CFCCF2F00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "projectservice", "..\projectservice\projectservice.csproj", "{CF8C9DDC-5B51-4AF4-8507-90053EAA48EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +43,14 @@ Global
 		{71EAB2D8-84A8-436D-B884-A5328C820222}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71EAB2D8-84A8-436D-B884-A5328C820222}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71EAB2D8-84A8-436D-B884-A5328C820222}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2456986-C1A3-4C36-81AB-2B4CFCCF2F00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2456986-C1A3-4C36-81AB-2B4CFCCF2F00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2456986-C1A3-4C36-81AB-2B4CFCCF2F00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2456986-C1A3-4C36-81AB-2B4CFCCF2F00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF8C9DDC-5B51-4AF4-8507-90053EAA48EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF8C9DDC-5B51-4AF4-8507-90053EAA48EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF8C9DDC-5B51-4AF4-8507-90053EAA48EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF8C9DDC-5B51-4AF4-8507-90053EAA48EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

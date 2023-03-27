@@ -13,7 +13,7 @@ namespace contentservice.Controllers
             this.websiteCopyService = _websiteCopyService;
         }
 
-        [HttpPost("/api/ctocopy")]
+        [HttpPost("/api/getctocopies")]
         public async Task<List<Copy>> GetCallToActionCopies(int amount, string actionGoal, string actionContext, string actionType, string tone, int maxCharacters, string[]? samplePhrases)
         {
             List<Copy> copy = await websiteCopyService.GenerateCallToActionCopy(amount, actionGoal, actionContext, actionType, tone, maxCharacters, samplePhrases);

@@ -26,20 +26,12 @@ namespace userservice.Services
         public async Task RegisterUser(UserDtoRegister userDto)
         {
             FirebaseAuthLink firebaseAuthLink = await firebaseProvider.CreateUserWithEmailAndPasswordAsync(userDto.Email, userDto.Password);
-            await SaveUserDb(userDto);
+            await userDbConfig.SaveUserDb(userDto, firebaseAuthLink.User.LocalId);
+
             // Here, send a message to the email service to confirm the user's email
             await firebaseProvider.SendEmailVerificationAsync(firebaseAuthLink);
         }
 
-        private async Task SaveUserDb(UserDtoRegister userDto)
-        {
-            await userDbConfig.GetUserCollection().InsertOneAsync(
-                new Models.User
-                {
-                    UserEmail = userDto.Email,
-                    UserName = userDto.Name,
-                });
-            
-        }
+
     }
 }
