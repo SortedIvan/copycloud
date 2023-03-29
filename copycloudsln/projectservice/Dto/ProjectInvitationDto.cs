@@ -1,11 +1,10 @@
-﻿namespace projectservice.Models
+﻿namespace projectservice.Dto
 {
-    public class ProjectInviteModel
+    public class ProjectInvitationDto
     {
-        public string Id { get; set; } = string.Empty;
         public byte[] Secret { get; set; } = new byte[0];
         public string Invitee { get; set; } = string.Empty;
         public string Sender { get; set; } = string.Empty;
-        public string ProjectId { get ; set; } = string.Empty;
+        public string ProjectId { get; set; } = string.Empty;
     }
 }

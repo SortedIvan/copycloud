@@ -1,11 +1,9 @@
-﻿namespace projectservice.Models
+﻿namespace projectservice.Dto
 {
-    public class ProjectModel
+    public class ProjectDto
     {
-        public string Id { get; set; }  = string.Empty;
         public string ProjectName { get; set; } = string.Empty;
         public string ProjectDescription { get; set; } = string.Empty;
         public string ProjectCreator { get; set; } = string.Empty; // The id of the user who created the project
-        public List<string> ProjectUsers { get; set; } = new List<string>();
     }
 }
