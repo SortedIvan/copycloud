@@ -30,10 +30,18 @@ namespace contentservice.Controllers
         }
 
         [HttpPost("/api/savewebsitecopy")]
-        public async Task<IActionResult> SaveWebsiteCopy(CtoCopyDto copyDto, string userId)
+        public async Task<IActionResult> SaveWebsiteCopy(CtoCopyDto copyDto)
         {
             try
             {
+                var reqUserId = (User.Identity as ClaimsIdentity).Claims.Where(c => c.Type == "id").FirstOrDefault();
+
+                if (reqUserId == null)
+                {
+                    return BadRequest("No such copy or user exists. Please log in or refresh the page.");
+                }
+                string userId = reqUserId.Value;
+
                 await websiteCopyService.SaveCopyToUser(copyDto, userId);
                 return Ok();
             }

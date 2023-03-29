@@ -11,7 +11,7 @@ namespace contentservice.Factories
 
         public CtoCopyDto CreateCtoCopyDto(string copy, string copyTone, string copyAction, string copyContext)
         {
-            return new CtoCopyDto { CopyId = new Guid().ToString(),Copy = copy,CopyTone = copyTone,CopyAction = copyAction,CopyContext = copyContext};
+            return new CtoCopyDto { CopyId = Guid.NewGuid().ToString(),Copy = copy,CopyTone = copyTone,CopyAction = copyAction,CopyContext = copyContext};
         }
     }
 

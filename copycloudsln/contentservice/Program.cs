@@ -1,4 +1,5 @@
 using contentservice.Auth;
+using contentservice.Data;
 using contentservice.Factories;
 using contentservice.Services;
 using contentservice.Utility;
@@ -6,6 +7,7 @@ using FirebaseAdmin;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using MongoDB.Driver;
+using userservice.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,7 @@ builder.Services.AddSingleton<IMongoClient>(s =>
 // Initialize the open ai connection class
 builder.Services.AddSingleton<IOpenAIManager, OpenAIManager>();
 builder.Services.AddScoped<IWebsiteCopyService, WebsiteCopyService>();
+builder.Services.AddScoped<IContentDbConfig, ContentDbConfig>();
 builder.Services.AddSingleton<IWebsiteCopyFactory, WebsiteCopyFactory>();
 
 builder.Services.AddControllers();
