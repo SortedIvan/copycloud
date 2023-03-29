@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Cosmos.Serialization.HybridRow.Schemas;
+﻿using Microsoft.Azure.Cosmos.Linq;
+using Microsoft.Azure.Cosmos.Serialization.HybridRow.Schemas;
 using MongoDB.Driver;
 using projectservice.Dto;
 using projectservice.Models;
@@ -40,17 +41,17 @@ namespace projectservice.Data
             return this.projectContent;
         }
 
-        public async Task<List<ProjectModel>> GetAllProjectsByCreator(string userId)
+        public async Task<List<ProjectModel>> GetAllProjectsByCreator(string userEmail)
         {
-            List<ProjectModel> projects = await this.projects.FindAsync(x => x.ProjectCreator == userId).Result.ToListAsync();
+            List<ProjectModel> projects = await this.projects.FindAsync(x => x.ProjectCreator == userEmail).Result.ToListAsync();
             return projects;
         }
 
-        public async Task<ProjectModel> GetProjectByCreator(string userId, string projectId)
+        public async Task<ProjectModel> GetProjectByCreator(string userEmail, string projectId)
         {
             try
             {
-                ProjectModel project = await this.projects.Find(x => x.ProjectCreator == userId && x.Id == projectId).FirstOrDefaultAsync();
+                ProjectModel project = await this.projects.Find(x => x.ProjectCreator == userEmail && x.Id == projectId).FirstOrDefaultAsync();
                 return project;
             }
             catch (Exception ex)
@@ -60,21 +61,21 @@ namespace projectservice.Data
             }
         }
 
-        public async Task<List<ProjectModel>> GetAllJoinedProjects(string userId)
+        public async Task<List<ProjectModel>> GetAllJoinedProjects(string userEmail)
         {
             List<ProjectModel> projects = new List<ProjectModel>();
-            projects = await this.projects.Find(x => x.ProjectUsers.Contains(userId)).ToListAsync();
+            projects = await this.projects.Find(x => x.ProjectUsers.Contains(userEmail)).ToListAsync();
 
             return projects;
         }
 
-        public async Task<bool> AddUserToProject(string projectId, string userId)
+        public async Task<bool> AddUserToProject(string projectId, string userEmail)
         {
             var project = await projects.Find(x => x.Id == projectId).FirstOrDefaultAsync();
             if (project == null) { return false; }
 
             var filter = Builders<ProjectModel>.Filter.Eq(s => s.Id, projectId);
-            var update = Builders<ProjectModel>.Update.AddToSet(x => x.ProjectUsers, userId);
+            var update = Builders<ProjectModel>.Update.AddToSet(x => x.ProjectUsers, userEmail);
             await projects.UpdateOneAsync(filter, update);
 
             return true;
@@ -123,8 +124,8 @@ namespace projectservice.Data
         {
             try
             {
-                bool exists = await projectInvites.FindAsync(x => x.Invitee == inviteDto.Invitee && x.Sender == inviteDto.Sender).Any();
-                if (exists)
+                var exists = await projectInvites.FindAsync(x => x.Invitee == inviteDto.Invitee && x.Sender == inviteDto.Sender).Result.ToListAsync();
+                if (exists.Count > 0)
                 {
                     return true;
                 }
@@ -166,7 +167,7 @@ namespace projectservice.Data
                     new ProjectModel
                     {
                         Id = Guid.NewGuid().ToString(),
-                        ProjectCreator = projectDto.ProjectCreator,
+                        ProjectCreator = projectDto.ProjectCreator, // Id or email?
                         ProjectDescription= projectDto.ProjectDescription,
                         ProjectName= projectDto.ProjectName,
                         ProjectUsers = new List<string> { projectDto.ProjectCreator },// Add the creator to project users
@@ -179,6 +180,8 @@ namespace projectservice.Data
                 return false;
             }
         }
+
+
 
     }
 }
