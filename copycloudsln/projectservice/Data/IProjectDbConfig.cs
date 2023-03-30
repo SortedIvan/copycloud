@@ -17,7 +17,7 @@ namespace projectservice.Data
         Task<ProjectInviteModel> GetProjectInviteBySenderInvitee(string invitee, string sender);
         Task<bool> DeleteProjectInvitation(string inviteId);
         Task<bool> CheckInvitationExists(ProjectInvitationDto inviteDto);
-        Task<bool> CreateProjectInvitation(ProjectInvitationDto inviteDto);
+        Task<bool> CreateProjectInvitation(ProjectInvitationDto inviteDto, string secret);
         Task<bool> AddNewProject(ProjectDto projectDto);
     }
 }

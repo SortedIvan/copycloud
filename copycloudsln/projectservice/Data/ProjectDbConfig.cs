@@ -21,9 +21,9 @@ namespace projectservice.Data
             var db = mongoClient.GetDatabase(config.GetSection("ProjectDbSettings:DatabaseName").Value);
 
             // Db settings
-            projects = db.GetCollection<ProjectModel>(config.GetSection("UserDbSettings:ProjectDbCollection").Value);
-            projectContent = db.GetCollection<ProjectContentModel>(config.GetSection("UserDbSettings:ProjectContents").Value);
-            projectInvites = db.GetCollection<ProjectInviteModel>(config.GetSection("UserDbSettings:ProjectContentDbCollection").Value);
+            projects = db.GetCollection<ProjectModel>(config.GetSection("ProjectDbSettings:ProjectDbCollection").Value);
+            projectContent = db.GetCollection<ProjectContentModel>(config.GetSection("ProjectDbSettings:ProjectContentDbCollection").Value);
+            projectInvites = db.GetCollection<ProjectInviteModel>(config.GetSection("ProjectDbSettings:ProjectInviteDbCollection").Value);
         }
 
         public IMongoCollection<ProjectModel> GetProjectCollection()
@@ -138,7 +138,7 @@ namespace projectservice.Data
             }
         }
 
-        public async Task<bool> CreateProjectInvitation(ProjectInvitationDto inviteDto)
+        public async Task<bool> CreateProjectInvitation(ProjectInvitationDto inviteDto, string secret)
         {
             try
             {
@@ -149,7 +149,7 @@ namespace projectservice.Data
                         Invitee = inviteDto.Invitee,
                         ProjectId= inviteDto.ProjectId,
                         Sender = inviteDto.Sender,
-                        Secret= inviteDto.Secret
+                        Secret= secret
                     });
                 return true;
             }

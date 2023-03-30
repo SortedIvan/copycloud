@@ -2,10 +2,11 @@
 using projectservice.Dto;
 using projectservice.Models;
 using projectservice.Utility;
+using System.Diagnostics;
 
 namespace projectservice.Services
 {
-    public class ProjectInviteService
+    public class ProjectInviteService : IProjectInviteService
     {
         // Invite person to project flow
         // 1) Create a token that has the structure {inviteeemail}:{projectinvitedto}:{invitor}:{secret}
@@ -16,6 +17,7 @@ namespace projectservice.Services
         //    the user who accepted the token has the email inside his access token
         // 6) Project service finally takes the {projectinvitedto} and {invitor} and checks whether the invitor owns that project (or is already a user)
         // 7) Finally project service adds the user to the project
+
         private readonly IProjectDbConfig projectDb;
         private readonly IConfiguration config;
         public ProjectInviteService(IProjectDbConfig _dbConfig, IConfiguration _config)
@@ -27,15 +29,13 @@ namespace projectservice.Services
         public async Task<bool> SendInvite(ProjectInvitationDto inviteDto)
         {
             // Here send a message to the Email service
-
-            bool success = await projectDb.CreateProjectInvitation(inviteDto);
-
+            Tuple<string, string> tokenBaseSecretPair = InvitationTokenUtil.CreateInvitationToken(inviteDto.Invitee, inviteDto.ProjectId, inviteDto.Sender);
+            bool success = await projectDb.CreateProjectInvitation(inviteDto, tokenBaseSecretPair.Item2);
             // SEND MESSAGE
-
             return true;
         }
 
-        public async Task<bool> ConsumeInvite(string token)
+        public async Task<Tuple<bool, string>> ConsumeInvite(string token)
         {
             Tuple<string, string, string, string> tokenContents = InvitationTokenUtil.ParseInviteToken(token);
 
@@ -43,14 +43,15 @@ namespace projectservice.Services
 
             if (invite == null)
             {
-                return false;
-
+                Debug.WriteLine("Invite is null");
+                return Tuple.Create(false, "Invite is null");
             }
 
             // Check whether the secret matches, validate the token
             if (invite.Secret != tokenContents.Item4) // Item4 == secret
             {
-                return false;
+                Debug.WriteLine("Secret is incorrect");
+                return Tuple.Create(false, "Secret is incorrect");
             }
 
             // Finally, accept the invite and add the user to the project
@@ -60,7 +61,7 @@ namespace projectservice.Services
 
             // Send an email to the invitor that the user has been added
 
-            return true;
+            return Tuple.Create(true, "Success");
 
         }
     }

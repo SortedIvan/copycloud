@@ -1,11 +1,19 @@
-﻿namespace projectservice.Models
+﻿using MongoDB.Bson.Serialization.Attributes;
+
+namespace projectservice.Models
 {
+    [BsonIgnoreExtraElements]
     public class ProjectModel
     {
-        public string Id { get; set; }  = string.Empty;
+        [BsonId]
+        public string Id { get; set; } = string.Empty;
+        [BsonElement("projectname")]
         public string ProjectName { get; set; } = string.Empty;
+        [BsonElement("projectdescription")]
         public string ProjectDescription { get; set; } = string.Empty;
-        public string ProjectCreator { get; set; } = string.Empty; // The id of the user who created the project
-        public List<string> ProjectUsers { get; set; } = new List<string>();
+        [BsonElement("projectcreator")]
+        public string ProjectCreator { get; set; } = string.Empty; // The email of the user who created the project
+        [BsonElement("projectusers")]
+        public List<string> ProjectUsers { get; set; } = new List<string>(); // The emails of joined users
     }
 }
