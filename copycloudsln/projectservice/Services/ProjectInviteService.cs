@@ -37,9 +37,11 @@ namespace projectservice.Services
 
         public async Task<Tuple<bool, string>> ConsumeInvite(string token)
         {
-            Tuple<string, string, string, string> tokenContents = InvitationTokenUtil.ParseInviteToken(token);
+            string baseDecodedToken = InvitationTokenUtil.Base64Decode(token);
 
-            ProjectInviteModel invite = await projectDb.GetProjectInviteBySenderInvitee(tokenContents.Item1, tokenContents.Item3); // Item1 == inviteeEmail | Item3 == Invitor
+            Tuple<string, string, string, string> tokenContents = InvitationTokenUtil.ParseInviteToken(baseDecodedToken);
+
+            ProjectInviteModel invite = await projectDb.GetProjectInviteBySenderInvitee(tokenContents.Item1, tokenContents.Item2); // Item1 == inviteeEmail | Item3 == Invitor
 
             if (invite == null)
             {
@@ -57,7 +59,7 @@ namespace projectservice.Services
             // Finally, accept the invite and add the user to the project
             await projectDb.DeleteProjectInvitation(invite.Id);
 
-            await projectDb.AddUserToProject(tokenContents.Item2, tokenContents.Item1); // Item2 == ProjectInvitedToId
+            await projectDb.AddUserToProject(tokenContents.Item3, tokenContents.Item1); // Item2 == ProjectInvitedToId
 
             // Send an email to the invitor that the user has been added
 

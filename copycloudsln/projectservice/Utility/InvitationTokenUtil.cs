@@ -6,7 +6,7 @@ namespace projectservice.Utility
 {
     public static class InvitationTokenUtil
     {
-        //{inviteeemail}:{projectinvitedto}:{invitor}:{secret}
+        //{inviteeemail}:{invitor}:{projectinvitedto}:{secret}
         public static Tuple<string, string> CreateInvitationToken(string inviteeEmail, string projectInvitedToId, string sender)
         {
             string tokenBase = $"{inviteeEmail};{sender};{projectInvitedToId}";
@@ -22,8 +22,20 @@ namespace projectservice.Utility
             string sender = words[1];
             string projectInvitedToId = words[2];
             string secret = words[3];
-            return Tuple.Create(inviteeEmail, projectInvitedToId, sender, secret);
+            return Tuple.Create(inviteeEmail, sender, projectInvitedToId, secret);
             
+        }
+
+        public static string Base64Encode(string plainText)
+        {
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return System.Convert.ToBase64String(plainTextBytes);
+        }
+
+        public static string Base64Decode(string base64EncodedData)
+        {
+            var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
+            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
         }
 
         public static string sha256_hash(string value)

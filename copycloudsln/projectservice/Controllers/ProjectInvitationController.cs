@@ -1,8 +1,12 @@
 ﻿using Firebase.Auth;
 using Microsoft.AspNetCore.Mvc;
+using projectservice.Data;
 using projectservice.Dto;
 using projectservice.Models;
 using projectservice.Services;
+using projectservice.Utility;
+using System.Runtime.CompilerServices;
+using System.Web;
 
 namespace projectservice.Controllers
 {
@@ -11,10 +15,12 @@ namespace projectservice.Controllers
     {
         private readonly IProjectService projectService;
         private readonly IProjectInviteService projectInviteService;
-        public ProjectInvitationController(IProjectService _projectService, IProjectInviteService _projectInviteService)
+        private readonly IProjectDbConfig db;
+        public ProjectInvitationController(IProjectService _projectService, IProjectInviteService _projectInviteService, IProjectDbConfig _db)
         { 
             this.projectService = _projectService;
             this.projectInviteService = _projectInviteService;
+            this.db = _db;
         }
 
 
@@ -34,5 +40,19 @@ namespace projectservice.Controllers
             Tuple<bool, string> result = await this.projectInviteService.ConsumeInvite(token);
             return Ok(result);
         }
+
+        [HttpPost("/api/getencodedtoken/")]
+        public async Task<IActionResult> GetToken(string token)
+        {
+            return Ok(InvitationTokenUtil.Base64Encode(token));
+        }
+
+        [HttpPost("/api/testtokendecoding/")]
+        public async Task<IActionResult> DecodeToken(string token)
+        {
+            return Ok(InvitationTokenUtil.ParseInviteToken(InvitationTokenUtil.Base64Decode(token)));
+        }
+
+
     }
 }

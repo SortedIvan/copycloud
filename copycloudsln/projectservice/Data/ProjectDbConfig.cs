@@ -97,7 +97,12 @@ namespace projectservice.Data
 
         public async Task<ProjectInviteModel> GetProjectInviteBySenderInvitee(string invitee, string sender)
         {
-            ProjectInviteModel inviteModel = await projectInvites.Find(x => x.Invitee == invitee && x.Sender == sender).FirstOrDefaultAsync();
+            var filter = Builders<ProjectInviteModel>.Filter.And(
+                Builders<ProjectInviteModel>.Filter.Where(p => p.Invitee == invitee),
+                Builders<ProjectInviteModel>.Filter.Where(p => p.Sender == sender)
+            );
+
+            ProjectInviteModel inviteModel = await projectInvites.Find(filter).FirstOrDefaultAsync();
 
             if (inviteModel == null)
             {
