@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton(FirebaseApp.Create());
 
+
 // Add services to the container.
 builder.Services.AddSingleton<IMongoClient>(s =>
         new MongoClient(builder.Configuration.GetValue<string>("UserDbSettings:ConnectionString")));

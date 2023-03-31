@@ -1,4 +1,5 @@
-﻿using projectservice.Data;
+﻿using Azure.Messaging.ServiceBus;
+using projectservice.Data;
 using projectservice.Dto;
 using projectservice.Models;
 using projectservice.Utility;
@@ -20,17 +21,24 @@ namespace projectservice.Services
 
         private readonly IProjectDbConfig projectDb;
         private readonly IConfiguration config;
+        private readonly ServiceBusSender serviceBusSender;
+        private readonly ServiceBusClient busClient;
         public ProjectInviteService(IProjectDbConfig _dbConfig, IConfiguration _config)
         {
             projectDb = _dbConfig;
             config = _config;
+            busClient = new ServiceBusClient(config.GetSection("ServiceBusConfig:ConnectionString").Value);
+            serviceBusSender = busClient.CreateSender("projectemailqueue");
         }
+
 
         public async Task<bool> SendInvite(ProjectInvitationDto inviteDto)
         {
             // Here send a message to the Email service
             Tuple<string, string> tokenBaseSecretPair = InvitationTokenUtil.CreateInvitationToken(inviteDto.Invitee, inviteDto.ProjectId, inviteDto.Sender);
             bool success = await projectDb.CreateProjectInvitation(inviteDto, tokenBaseSecretPair.Item2);
+
+            await serviceBusSender.SendMessageAsync(new ServiceBusMessage(tokenBaseSecretPair.Item1)); // Message is sent to queue
             // SEND MESSAGE
             return true;
         }

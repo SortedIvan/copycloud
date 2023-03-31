@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Cosmos.Linq;
+﻿using Azure.Messaging.ServiceBus;
+using Microsoft.Azure.Cosmos.Linq;
 using Microsoft.Azure.Cosmos.Serialization.HybridRow.Schemas;
 using MongoDB.Driver;
 using projectservice.Dto;
@@ -14,7 +15,6 @@ namespace projectservice.Data
         private readonly IMongoCollection<ProjectModel> projects;
         private readonly IMongoCollection<ProjectContentModel> projectContent;
         private readonly IMongoCollection<ProjectInviteModel> projectInvites;
-
         public ProjectDbConfig(IConfiguration _config, IMongoClient mongoClient)
         {
             this.config = _config;
@@ -24,6 +24,7 @@ namespace projectservice.Data
             projects = db.GetCollection<ProjectModel>(config.GetSection("ProjectDbSettings:ProjectDbCollection").Value);
             projectContent = db.GetCollection<ProjectContentModel>(config.GetSection("ProjectDbSettings:ProjectContentDbCollection").Value);
             projectInvites = db.GetCollection<ProjectInviteModel>(config.GetSection("ProjectDbSettings:ProjectInviteDbCollection").Value);
+
         }
 
         public IMongoCollection<ProjectModel> GetProjectCollection()

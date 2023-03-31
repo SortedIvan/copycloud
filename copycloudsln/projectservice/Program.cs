@@ -5,10 +5,17 @@ using MongoDB.Driver;
 using projectservice.Auth;
 using projectservice.Data;
 using projectservice.Services;
+using Microsoft.Extensions.Azure;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddAzureClients(serviceAdd =>
+{
+    serviceAdd.AddServiceBusClient(builder.Configuration.GetSection("ServiceBusConfig:ConnectionString").Value);
+});
+
 
 builder.Services.AddSingleton(FirebaseApp.Create());
 builder.Services.AddScoped<IProjectDbConfig, ProjectDbConfig>();
