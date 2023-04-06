@@ -9,5 +9,6 @@ namespace contentservice.Services
         Task<string> GenerateCallToActionCopyTest(int amount, string actionGoal, string actionContext, string actionType, string tone, int maxCharacters, string[]? samplePhrases);
         Task<bool> SaveCopyToUser(CtoCopyDto copy, string userId);
         Task<CtoModel> GetCtoCopyByUserId(string userId);
+        Task<List<CtoModel>> GetAllSavedCopies(string userId);
     }
 }

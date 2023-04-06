@@ -109,5 +109,11 @@ namespace contentservice.Services
             CtoModel model = await contentDb.GetCtoCopyByUserId(userId);
             return model;
         }
+
+        public async Task<List<CtoModel>> GetAllSavedCopies(string userId)
+        {
+            List<CtoModel> userCopies = await contentDb.GetAllUserSavedCtoCopies(userId);
+            return userCopies;
+        }
     }
 }

@@ -11,6 +11,9 @@ namespace contentservice.Models
         [BsonElement("userid")]
         public string UserId { get; set; } = string.Empty;
 
+        [BsonElement("copytype")]
+        public string CopyType { get; set; } = string.Empty;
+
         [BsonElement("copy")]
         public string Copy { get; set; } = string.Empty;
 

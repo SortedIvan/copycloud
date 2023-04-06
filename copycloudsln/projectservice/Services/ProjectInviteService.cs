@@ -1,4 +1,6 @@
 ﻿using Azure.Messaging.ServiceBus;
+using EmailServiceMessages;
+using Newtonsoft.Json;
 using projectservice.Data;
 using projectservice.Dto;
 using projectservice.Models;
@@ -38,7 +40,18 @@ namespace projectservice.Services
             Tuple<string, string> tokenBaseSecretPair = InvitationTokenUtil.CreateInvitationToken(inviteDto.Invitee, inviteDto.ProjectId, inviteDto.Sender);
             bool success = await projectDb.CreateProjectInvitation(inviteDto, tokenBaseSecretPair.Item2);
 
-            await serviceBusSender.SendMessageAsync(new ServiceBusMessage(tokenBaseSecretPair.Item1)); // Message is sent to queue
+            ProjectInviteMessage projectInviteMessage = new ProjectInviteMessage
+            {
+                ProjectId = inviteDto.ProjectId,
+                ProjectName = inviteDto.ProjectId,
+                Receiver = inviteDto.Invitee,
+                Sender = inviteDto.Sender,
+                Token = InvitationTokenUtil.Base64Encode(tokenBaseSecretPair.Item1)
+            };
+
+            string messageBody = JsonConvert.SerializeObject(projectInviteMessage);
+
+            await serviceBusSender.SendMessageAsync(new ServiceBusMessage(messageBody)); // Message is sent to queue
             // SEND MESSAGE
             return true;
         }

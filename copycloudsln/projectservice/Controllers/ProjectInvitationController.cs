@@ -31,7 +31,7 @@ namespace projectservice.Controllers
             return Ok("Invite succesful");
         }
 
-        [HttpPost("/api/acceptinvite/")]
+        [HttpGet("/api/acceptinvite/")]
         public async Task<IActionResult> AcceptProjectInvite([FromQuery] string token)
         {
             // TODO: Check if the user is an actual user of the platform

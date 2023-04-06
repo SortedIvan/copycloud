@@ -2,7 +2,6 @@
 {
     public class CtoCopyDto
     {
-        public string CopyId { get; set; } = string.Empty;
         public string Copy { get; set; } = string.Empty;
         public string CopyTone { get; set; } = string.Empty;
         public string CopyAction { get; set; } = string.Empty; 

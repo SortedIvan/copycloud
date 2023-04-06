@@ -64,5 +64,19 @@ namespace contentservice.Controllers
             string userId = reqUserId.Value;
             return Ok(await websiteCopyService.GetCtoCopyByUserId(userId));
         }
+
+        [HttpGet("/api/getsavedcopies")]
+        public async Task<ActionResult<List<CtoModel>>> GetAllSavedCopies()
+        {
+            var reqUserId = (User.Identity as ClaimsIdentity).Claims.Where(c => c.Type == "id").FirstOrDefault();
+
+            if (reqUserId == null)
+            {
+                return BadRequest("No such copy or user exists. Please log in or refresh the page.");
+            }
+
+            string userId = reqUserId.Value;
+            return Ok(await websiteCopyService.GetAllSavedCopies(userId));
+        }
     }
 }

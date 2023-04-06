@@ -6,16 +6,14 @@ using projectservice.Auth;
 using projectservice.Data;
 using projectservice.Services;
 using Microsoft.Extensions.Azure;
-using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 // Add services to the container.
 builder.Services.AddAzureClients(serviceAdd =>
 {
     serviceAdd.AddServiceBusClient(builder.Configuration.GetSection("ServiceBusConfig:ConnectionString").Value);
 });
-
 
 builder.Services.AddSingleton(FirebaseApp.Create());
 builder.Services.AddScoped<IProjectDbConfig, ProjectDbConfig>();
@@ -25,6 +23,17 @@ builder.Services.AddScoped<IProjectInviteService, ProjectInviteService>();
 // Add services to the container.
 builder.Services.AddSingleton<IMongoClient>(s =>
         new MongoClient(builder.Configuration.GetValue<string>("ProjectDbSettings:ConnectionString")));
+
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+            policy =>
+            {
+                policy.WithOrigins("*");
+            });
+});
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -47,8 +56,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         x.Cookie.Name = "token";
     });
 
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -58,7 +65,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthorization();
 

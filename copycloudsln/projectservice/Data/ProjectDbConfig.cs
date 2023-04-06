@@ -1,10 +1,8 @@
-﻿using Azure.Messaging.ServiceBus;
-using Microsoft.Azure.Cosmos.Linq;
-using Microsoft.Azure.Cosmos.Serialization.HybridRow.Schemas;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using projectservice.Dto;
 using projectservice.Models;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 
 namespace projectservice.Data
@@ -187,7 +185,39 @@ namespace projectservice.Data
             }
         }
 
+        public async Task<bool> AddContentToProject(object content, string contentId, string projectId, string addedBy)
+        {
+            try
+            {
+                await this.projectContent.InsertOneAsync(
+                    new ProjectContentModel
+                    {
+                        Id = contentId,
+                        ProjectId = projectId,
+                        AddedBy = addedBy,
+                        ContentData = content
+                    });
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return false;
+            }
+        }
 
-
+        public async Task<List<string>> GetAllUsersInProject(string projectId)
+        {
+            try
+            {
+                ProjectModel project = await this.projects.Find(x => x.Id == projectId).FirstOrDefaultAsync();
+                return project.ProjectUsers;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
     }
 }

@@ -9,5 +9,6 @@ namespace contentservice.Data
         IMongoCollection<CtoModel> GetUserCollection();
         Task<CtoModel> GetCtoCopyByUserId(string userId);
         Task<bool> SaveCtoCopy(CtoCopyDto copyDto, string userId);
+        Task<List<CtoModel>> GetAllUserSavedCtoCopies(string userId);
     }
 }

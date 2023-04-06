@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using ContentLibrary;
+using MongoDB.Driver;
 using projectservice.Dto;
 using projectservice.Models;
 
@@ -19,5 +20,7 @@ namespace projectservice.Data
         Task<bool> CheckInvitationExists(ProjectInvitationDto inviteDto);
         Task<bool> CreateProjectInvitation(ProjectInvitationDto inviteDto, string secret);
         Task<bool> AddNewProject(ProjectDto projectDto);
+        Task<bool> AddContentToProject(object content, string contentId, string projectId, string addedBy);
+        Task<List<string>> GetAllUsersInProject(string projectId);
     }
 }

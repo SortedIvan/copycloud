@@ -12,6 +12,7 @@ namespace userservice.Database
     {
         private readonly IConfiguration config;
         private readonly IMongoCollection<CtoModel> ctoCopies;
+        //private readonly IMongoCollection<object> 
 
         public ContentDbConfig(IConfiguration _config, IMongoClient mongoClient)
         {
@@ -39,6 +40,20 @@ namespace userservice.Database
             }
         }
 
+        public async Task<List<CtoModel>> GetAllUserSavedCtoCopies(string userId)
+        {
+            try
+            {
+                List<CtoModel> userCopies = await this.ctoCopies.Find(x => x.UserId == userId).ToListAsync();
+                return userCopies;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
+
         public async Task<bool> SaveCtoCopy(CtoCopyDto copyDto, string userId)
         {
             await this.ctoCopies.InsertOneAsync(
@@ -54,6 +69,7 @@ namespace userservice.Database
             return true;
 
         }
+
 
     }
 }
