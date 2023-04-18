@@ -13,14 +13,11 @@ namespace projectservice.Controllers
     [ApiController]
     public class ProjectInvitationController : ControllerBase
     {
-        private readonly IProjectService projectService;
         private readonly IProjectInviteService projectInviteService;
-        private readonly IProjectDbConfig db;
-        public ProjectInvitationController(IProjectService _projectService, IProjectInviteService _projectInviteService, IProjectDbConfig _db)
+
+        public ProjectInvitationController(IProjectInviteService _projectInviteService)
         { 
-            this.projectService = _projectService;
             this.projectInviteService = _projectInviteService;
-            this.db = _db;
         }
 
 

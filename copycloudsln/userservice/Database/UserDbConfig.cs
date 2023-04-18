@@ -38,6 +38,18 @@ namespace userservice.Database
             }
         }
 
+        public async Task<bool> CheckUserExists(string userEmail)
+        {
+            List<UserModel> check = await this.users.Find(x => x.UserEmail == userEmail).ToListAsync();
+
+            if (check.Count > 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public async Task<bool> SaveUserDb(UserDtoRegister userDto, string firebaseId)
         {
             try

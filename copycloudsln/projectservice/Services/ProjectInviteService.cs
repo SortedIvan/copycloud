@@ -40,8 +40,9 @@ namespace projectservice.Services
             Tuple<string, string> tokenBaseSecretPair = InvitationTokenUtil.CreateInvitationToken(inviteDto.Invitee, inviteDto.ProjectId, inviteDto.Sender);
             bool success = await projectDb.CreateProjectInvitation(inviteDto, tokenBaseSecretPair.Item2);
 
-            ProjectInviteMessage projectInviteMessage = new ProjectInviteMessage
+            EmailMessage projectInviteMessage = new EmailMessage
             {
+                Type = "invite",
                 ProjectId = inviteDto.ProjectId,
                 ProjectName = inviteDto.ProjectId,
                 Receiver = inviteDto.Invitee,
@@ -50,9 +51,9 @@ namespace projectservice.Services
             };
 
             string messageBody = JsonConvert.SerializeObject(projectInviteMessage);
-
-            await serviceBusSender.SendMessageAsync(new ServiceBusMessage(messageBody)); // Message is sent to queue
             // SEND MESSAGE
+            await serviceBusSender.SendMessageAsync(new ServiceBusMessage(messageBody)); // Message is sent to queue
+            
             return true;
         }
 
@@ -83,6 +84,18 @@ namespace projectservice.Services
             await projectDb.AddUserToProject(tokenContents.Item3, tokenContents.Item1); // Item2 == ProjectInvitedToId
 
             // Send an email to the invitor that the user has been added
+
+            EmailMessage projectInviteMessage = new EmailMessage
+            {
+                Type = "inviteAccept",
+                ProjectId = tokenContents.Item3,
+                Receiver = tokenContents.Item2,
+                Sender = tokenContents.Item1,
+            };
+
+            string messageBody = JsonConvert.SerializeObject(projectInviteMessage);
+            // SEND MESSAGE
+            await serviceBusSender.SendMessageAsync(new ServiceBusMessage(messageBody)); // Message is sent to queue
 
             return Tuple.Create(true, "Success");
 

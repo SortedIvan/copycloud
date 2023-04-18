@@ -9,7 +9,6 @@ namespace projectservice.Data
     {
         IMongoCollection<ProjectModel> GetProjectCollection();
         IMongoCollection<ProjectInviteModel> GetProjectInvites();
-        IMongoCollection<ProjectContentModel> GetProjectContent();
         Task<List<ProjectModel>> GetAllProjectsByCreator(string userEmail);
         Task<ProjectModel> GetProjectByCreator(string userEmail, string projectId);
         Task<List<ProjectModel>> GetAllJoinedProjects(string userEmail);
@@ -20,7 +19,7 @@ namespace projectservice.Data
         Task<bool> CheckInvitationExists(ProjectInvitationDto inviteDto);
         Task<bool> CreateProjectInvitation(ProjectInvitationDto inviteDto, string secret);
         Task<bool> AddNewProject(ProjectDto projectDto);
-        Task<bool> AddContentToProject(object content, string contentId, string projectId, string addedBy);
         Task<List<string>> GetAllUsersInProject(string projectId);
+        Task<bool> CheckProjectExists(string projectId);
     }
 }

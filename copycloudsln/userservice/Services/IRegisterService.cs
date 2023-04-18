@@ -4,6 +4,6 @@ namespace userservice.Services
 {
     public interface IRegisterService
     {
-        Task RegisterUser(UserDtoRegister userDto);
+        Task<Tuple<bool, string>> RegisterUser(UserDtoRegister userDto);
     }
 }

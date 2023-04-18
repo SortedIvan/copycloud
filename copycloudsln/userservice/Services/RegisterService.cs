@@ -23,13 +23,28 @@ namespace userservice.Services
         }
 
 
-        public async Task RegisterUser(UserDtoRegister userDto)
+        public async Task<Tuple<bool, string>> RegisterUser(UserDtoRegister userDto)
         {
+            try
+            {
+                bool userExists = await userDbConfig.CheckUserExists(userDto.Email);
+                if (userExists)
+                {
+                    return Tuple.Create(false, "A user with this email already exists");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Tuple.Create(false, ex.Message);
+            }
+
             FirebaseAuthLink firebaseAuthLink = await firebaseProvider.CreateUserWithEmailAndPasswordAsync(userDto.Email, userDto.Password);
             await userDbConfig.SaveUserDb(userDto, firebaseAuthLink.User.LocalId);
 
             // Here, send a message to the email service to confirm the user's email
             await firebaseProvider.SendEmailVerificationAsync(firebaseAuthLink);
+
+            return Tuple.Create(true, "User created, please verify email to start using application");
         }
 
 

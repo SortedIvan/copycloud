@@ -11,7 +11,6 @@ namespace projectservice.Data
     {
         private readonly IConfiguration config;
         private readonly IMongoCollection<ProjectModel> projects;
-        private readonly IMongoCollection<ProjectContentModel> projectContent;
         private readonly IMongoCollection<ProjectInviteModel> projectInvites;
         public ProjectDbConfig(IConfiguration _config, IMongoClient mongoClient)
         {
@@ -20,7 +19,6 @@ namespace projectservice.Data
 
             // Db settings
             projects = db.GetCollection<ProjectModel>(config.GetSection("ProjectDbSettings:ProjectDbCollection").Value);
-            projectContent = db.GetCollection<ProjectContentModel>(config.GetSection("ProjectDbSettings:ProjectContentDbCollection").Value);
             projectInvites = db.GetCollection<ProjectInviteModel>(config.GetSection("ProjectDbSettings:ProjectInviteDbCollection").Value);
 
         }
@@ -35,10 +33,6 @@ namespace projectservice.Data
             return this.projectInvites;
         }
 
-        public IMongoCollection<ProjectContentModel> GetProjectContent()
-        {
-            return this.projectContent;
-        }
 
         public async Task<List<ProjectModel>> GetAllProjectsByCreator(string userEmail)
         {
@@ -185,27 +179,6 @@ namespace projectservice.Data
             }
         }
 
-        public async Task<bool> AddContentToProject(object content, string contentId, string projectId, string addedBy)
-        {
-            try
-            {
-                await this.projectContent.InsertOneAsync(
-                    new ProjectContentModel
-                    {
-                        Id = contentId,
-                        ProjectId = projectId,
-                        AddedBy = addedBy,
-                        ContentData = content
-                    });
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                return false;
-            }
-        }
-
         public async Task<List<string>> GetAllUsersInProject(string projectId)
         {
             try
@@ -217,6 +190,24 @@ namespace projectservice.Data
             {
                 Debug.WriteLine(ex);
                 return null;
+            }
+        }
+
+        public async Task<bool> CheckProjectExists(string projectId)
+        {
+            try
+            {
+                var exists = await projects.FindAsync(x => x.Id == projectId).Result.ToListAsync();
+                if (exists.Count > 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return true;
             }
         }
     }

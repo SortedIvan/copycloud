@@ -6,6 +6,9 @@ using projectservice.Auth;
 using projectservice.Data;
 using projectservice.Services;
 using Microsoft.Extensions.Azure;
+using projectservice.Util;
+using PusherServer;
+using projectservice.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -15,10 +18,12 @@ builder.Services.AddAzureClients(serviceAdd =>
     serviceAdd.AddServiceBusClient(builder.Configuration.GetSection("ServiceBusConfig:ConnectionString").Value);
 });
 
+builder.Services.AddSingleton<IPusherHelper, PusherHelper>();
 builder.Services.AddSingleton(FirebaseApp.Create());
 builder.Services.AddScoped<IProjectDbConfig, ProjectDbConfig>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectInviteService, ProjectInviteService>();
+builder.Services.AddSingleton<IContentTypeParser, ContentTypeParser>();
 
 // Add services to the container.
 builder.Services.AddSingleton<IMongoClient>(s =>
