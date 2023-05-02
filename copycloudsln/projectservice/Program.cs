@@ -6,12 +6,14 @@ using projectservice.Auth;
 using projectservice.Data;
 using projectservice.Services;
 using Microsoft.Extensions.Azure;
-using projectservice.Util;
-using PusherServer;
+
 using projectservice.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+builder.Services.AddSingleton(FirebaseApp.Create());
+
 // Add services to the container.
 builder.Services.AddAzureClients(serviceAdd =>
 {
@@ -19,16 +21,13 @@ builder.Services.AddAzureClients(serviceAdd =>
 });
 
 builder.Services.AddSingleton<IPusherHelper, PusherHelper>();
-builder.Services.AddSingleton(FirebaseApp.Create());
 builder.Services.AddScoped<IProjectDbConfig, ProjectDbConfig>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectInviteService, ProjectInviteService>();
-builder.Services.AddSingleton<IContentTypeParser, ContentTypeParser>();
 
 // Add services to the container.
 builder.Services.AddSingleton<IMongoClient>(s =>
         new MongoClient(builder.Configuration.GetValue<string>("ProjectDbSettings:ConnectionString")));
-
 
 
 builder.Services.AddCors(options =>
@@ -36,13 +35,15 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
             policy =>
             {
-                policy.WithOrigins("*");
+                policy.WithOrigins("http://localhost:8080").AllowCredentials().AllowAnyHeader().AllowAnyMethod();
             });
 });
+
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddScheme<AuthenticationSchemeOptions, FirebaseAuthenticationHandler>(JwtBearerDefaults.AuthenticationScheme, (o) =>
@@ -61,6 +62,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         x.Cookie.Name = "token";
     });
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -70,11 +72,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+//app.UseHttpsRedirection();
+
+
 app.UseCors(MyAllowSpecificOrigins);
 
+app.UseAuthentication(); // ALWAYS PUT app.useAuthentication first
 app.UseAuthorization();
-
-app.UseAuthentication();
 
 app.MapControllers();
 

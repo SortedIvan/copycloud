@@ -1,17 +1,25 @@
-﻿using Azure.Storage.Blobs;
+﻿using Azure.Messaging.ServiceBus;
+using Azure.Storage.Blobs;
+using EmailServiceMessages;
+using Newtonsoft.Json;
+using projectlibrary;
 using projectservice.Utility;
 
 namespace projectservice.Services
 {
-    public class DocumentService
+    public class DocumentService : IDocumentService
     {
         private IConfiguration config;
         private IBlobStorageHelper blobStorageHelper;
+        private readonly ServiceBusSender serviceBusSender;
+        private readonly ServiceBusClient busClient;
 
         public DocumentService(IConfiguration _config, IBlobStorageHelper _blobStorageHelper)
         {
             config = _config;
             this.blobStorageHelper = _blobStorageHelper;
+            busClient = new ServiceBusClient(config.GetSection("ServiceBusConfig:ConnectionString").Value);
+            serviceBusSender = busClient.CreateSender("projectsavequeue");
         }
 
 
@@ -19,17 +27,33 @@ namespace projectservice.Services
         {
             // 1) Check if the document exists
             // 2) Send a message to the document background app with the content and the projectid
+            
+            try
+            {
+                DocumentMessage documentMessage = new DocumentMessage
+                {
+                    ProjectID = projectId,
+                    Content = content
+                };
 
+                string messageBody = JsonConvert.SerializeObject(documentMessage);
+                // SEND MESSAGE
+                await serviceBusSender.SendMessageAsync(new ServiceBusMessage(messageBody)); // Message is sent to queue
+            }
+            catch (Exception ex) 
+            {
+                return Tuple.Create(false, ex.Message);
+            }
 
             return Tuple.Create(true, "Document has been succesfully saved");
            
         }
 
-        public async Task<Tuple<bool, string>> CreateDocument(string projectName, string projectId)
+        public async Task<Tuple<bool, string>> CreateDocument(string projectId)
         {
-            // 1) Check if the document name already exists
+            // 1) Check if the document name already exists - This is mitigated for now as there can't be two of the same identifiers
 
-            return await blobStorageHelper.CreateDocumentBlob(projectName + projectId);
+            return await blobStorageHelper.CreateDocumentBlob(projectId);
         }
 
     }

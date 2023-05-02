@@ -1,8 +1,6 @@
 ﻿using Azure;
 using Azure.Communication.Email;
-using emailappservice.Service;
 using emailappservice.Utility;
-using Newtonsoft.Json.Linq;
 
 namespace emailappservice.Service
 {

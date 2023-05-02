@@ -1,12 +1,8 @@
-﻿using Firebase.Auth;
-using Microsoft.AspNetCore.Mvc;
-using projectservice.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using projectservice.Dto;
-using projectservice.Models;
 using projectservice.Services;
 using projectservice.Utility;
-using System.Runtime.CompilerServices;
-using System.Web;
+
 
 namespace projectservice.Controllers
 {
@@ -35,7 +31,12 @@ namespace projectservice.Controllers
             // Confirm his identity
 
             Tuple<bool, string> result = await this.projectInviteService.ConsumeInvite(token);
-            return Ok(result);
+
+            if (result.Item1)
+            {
+                return Redirect($"http://localhost:8080/app/myboard/{result.Item2}");
+            }
+            return BadRequest(result);
         }
 
         [HttpPost("/api/getencodedtoken/")]

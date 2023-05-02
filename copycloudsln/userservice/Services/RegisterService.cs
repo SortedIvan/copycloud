@@ -39,12 +39,12 @@ namespace userservice.Services
             }
 
             FirebaseAuthLink firebaseAuthLink = await firebaseProvider.CreateUserWithEmailAndPasswordAsync(userDto.Email, userDto.Password);
-            await userDbConfig.SaveUserDb(userDto, firebaseAuthLink.User.LocalId);
+            Tuple<bool, string> result = await userDbConfig.SaveUserDb(userDto, firebaseAuthLink.User.LocalId);
 
             // Here, send a message to the email service to confirm the user's email
             await firebaseProvider.SendEmailVerificationAsync(firebaseAuthLink);
 
-            return Tuple.Create(true, "User created, please verify email to start using application");
+            return result;
         }
 
 

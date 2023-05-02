@@ -1,5 +1,4 @@
-﻿using ContentLibrary;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using projectservice.Dto;
 using projectservice.Models;
 
@@ -18,8 +17,9 @@ namespace projectservice.Data
         Task<bool> DeleteProjectInvitation(string inviteId);
         Task<bool> CheckInvitationExists(ProjectInvitationDto inviteDto);
         Task<bool> CreateProjectInvitation(ProjectInvitationDto inviteDto, string secret);
-        Task<bool> AddNewProject(ProjectDto projectDto);
+        Task<Tuple<bool, string>> AddNewProject(ProjectDto projectDto);
         Task<List<string>> GetAllUsersInProject(string projectId);
         Task<bool> CheckProjectExists(string projectId);
+        Task<bool> CheckUserInProject(string userEmail, string projectId);
     }
 }

@@ -35,8 +35,7 @@ namespace projectservice.Utility
             // Assume that the document name has been checked if it already exists
             BlobClient blobClient = await GetBlobClient(documentName);
 
-            string newContents = "This is some new text";
-            byte[] byteArray = Encoding.UTF8.GetBytes(newContents);
+            byte[] byteArray = Encoding.UTF8.GetBytes(documentContent);
             using (MemoryStream stream = new MemoryStream(byteArray))
             {
                 await blobClient.UploadAsync(stream, overwrite: true);
@@ -47,7 +46,7 @@ namespace projectservice.Utility
         public async Task<Tuple<bool, string>> CreateDocumentBlob(string documentName)
         {
             // Assume that the document name has been checked if it already exists
-            BlobClient blobClient = await GetBlobClient(documentName);
+            BlobClient blobClient = await GetBlobClient(documentName + ".txt");
 
             // Create a new memory stream to hold the file contents
             using (MemoryStream memoryStream = new MemoryStream())

@@ -37,6 +37,7 @@ namespace projectservice.Services
         public async Task<bool> SendInvite(ProjectInvitationDto inviteDto)
         {
             // Here send a message to the Email service
+            // Must check if user is already in the project
             Tuple<string, string> tokenBaseSecretPair = InvitationTokenUtil.CreateInvitationToken(inviteDto.Invitee, inviteDto.ProjectId, inviteDto.Sender);
             bool success = await projectDb.CreateProjectInvitation(inviteDto, tokenBaseSecretPair.Item2);
 
@@ -97,7 +98,7 @@ namespace projectservice.Services
             // SEND MESSAGE
             await serviceBusSender.SendMessageAsync(new ServiceBusMessage(messageBody)); // Message is sent to queue
 
-            return Tuple.Create(true, "Success");
+            return Tuple.Create(true, tokenContents.Item3);
 
         }
     }

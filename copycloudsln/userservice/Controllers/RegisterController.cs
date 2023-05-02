@@ -15,11 +15,16 @@ namespace userservice.Controllers
 
 
         [HttpPost("/api/register")]
-        public async Task<IActionResult> Register(UserDtoRegister userDto)
+        public async Task<ActionResult<Tuple<bool, string>>> Register(UserDtoRegister userDto)
         {   
             try
             {
-                await registerService.RegisterUser(userDto);
+                Tuple<bool, string> result = await registerService.RegisterUser(userDto);
+                if (result.Item1)
+                {
+                    return Ok("Please verify your email to start using the application!");
+                }
+                return BadRequest(result.Item2);
             }
             catch (FirebaseAuthException ex)
             {
@@ -37,7 +42,6 @@ namespace userservice.Controllers
 
                 return BadRequest(ex.Message);
             }
-            return Ok("Please verify your email to start using the application!");
         }
     }
 }

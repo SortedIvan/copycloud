@@ -62,6 +62,7 @@ namespace userservice.Controllers
                     SameSite = SameSiteMode.None,
 
                 });
+
             return Ok("User logged in.");
 
         }

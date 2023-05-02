@@ -7,7 +7,7 @@ using userservice.Auth;
 using FirebaseAdmin;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 builder.Services.AddSingleton(FirebaseApp.Create());
 
@@ -19,6 +19,15 @@ builder.Services.AddSingleton<IMongoClient>(s =>
 builder.Services.AddScoped<IUserDbConfig, UserDbConfig>();
 builder.Services.AddScoped<IRegisterService, RegisterService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+            policy =>
+            {
+                policy.WithOrigins("http://localhost:8080").AllowCredentials().AllowAnyHeader().AllowAnyMethod();
+            });
+});
 
 
 builder.Services.AddControllers();
@@ -44,11 +53,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 
-
-
-
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -60,6 +64,8 @@ if (app.Environment.IsDevelopment())
 
 //app.UseHttpsRedirection();
 
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthentication();
 

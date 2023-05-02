@@ -51,7 +51,7 @@ namespace userservice.Auth
             }
             catch (Exception ex)
             {
-                return AuthenticateResult.Fail(ex);
+                return AuthenticateResult.Fail(ex + "is the issue");
             }
         }
 

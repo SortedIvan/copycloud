@@ -157,25 +157,26 @@ namespace projectservice.Data
             }
         }
 
-        public async Task<bool> AddNewProject(ProjectDto projectDto)
+        public async Task<Tuple<bool, string>> AddNewProject(ProjectDto projectDto)
         {
             try
             {
-                await this.projects.InsertOneAsync(
-                    new ProjectModel
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        ProjectCreator = projectDto.ProjectCreator, // Id or email?
-                        ProjectDescription= projectDto.ProjectDescription,
-                        ProjectName= projectDto.ProjectName,
-                        ProjectUsers = new List<string> { projectDto.ProjectCreator },// Add the creator to project users
-                        
-                    });
-                return true;
+                ProjectModel projectModel = new ProjectModel
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    ProjectCreator = projectDto.ProjectCreator, // Id or email?
+                    ProjectDescription = projectDto.ProjectDescription,
+                    ProjectName = projectDto.ProjectName,
+                    ProjectUsers = new List<string> { projectDto.ProjectCreator },// Add the creator to project users
+
+                };
+                await this.projects.InsertOneAsync(projectModel);
+
+                return Tuple.Create(true, projectModel.Id);
             }
             catch (Exception ex)
             {
-                return false;
+                return Tuple.Create(false, "Null");
             }
         }
 
@@ -208,6 +209,28 @@ namespace projectservice.Data
             {
                 Debug.WriteLine(ex.Message);
                 return true;
+            }
+        }
+
+        public async Task<bool> CheckUserInProject(string userEmail, string projectId)
+        {
+            try
+            {
+                ProjectModel project = await projects.Find(x => x.Id == projectId).FirstOrDefaultAsync();
+                for (int i = 0; i < project.ProjectUsers.Count; i++)
+                {
+                    if (project.ProjectUsers[i] == userEmail)
+                    {
+                        return true;
+                    }
+                }
+                
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return false;
             }
         }
     }

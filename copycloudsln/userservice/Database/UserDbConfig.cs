@@ -50,7 +50,7 @@ namespace userservice.Database
             return false;
         }
 
-        public async Task<bool> SaveUserDb(UserDtoRegister userDto, string firebaseId)
+        public async Task<Tuple<bool,string>> SaveUserDb(UserDtoRegister userDto, string firebaseId)
         {
             try
             {
@@ -61,11 +61,11 @@ namespace userservice.Database
                         UserEmail = userDto.Email,
                         UserName = userDto.Name
                     });
-                return true;
+                return Tuple.Create(true, "User saved successfully");
             }
             catch (Exception ex)
             {
-                return false;
+                return Tuple.Create(false, ex.Message.ToString());
             }
 
         }
