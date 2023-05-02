@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using projectlibrary;
 using projectservice.Data;
 using projectservice.Services;
 using projectservice.Utility;
@@ -12,11 +13,13 @@ namespace projectservice.Controllers
         private readonly IPusherHelper pusherHelper;
         private readonly IProjectService projectService;
         private readonly IProjectDbConfig projectDb;
-        public DocumentController(IPusherHelper _pusherHelper, IProjectService _projectService, IProjectDbConfig _dbConfig) 
+        private readonly IDocumentService documentService;
+        public DocumentController(IPusherHelper _pusherHelper, IProjectService _projectService, IProjectDbConfig _dbConfig, IDocumentService _documentService) 
         {
             this.pusherHelper = _pusherHelper;
             this.projectService = _projectService;
             this.projectDb = _dbConfig;
+            this.documentService = _documentService;
         }
 
         [HttpPost("/api/authenticatepusher")]
@@ -59,9 +62,19 @@ namespace projectservice.Controllers
 
             //projectDb.Get
 
-            projectDb
+            if (!await projectDb.CheckProjectExists(documentId))
+            {
+                return BadRequest("Document does not exist. Please retry.");
+            }
 
-            return Ok();
+            Tuple<bool, string> result = await this.documentService.SaveDocument(documentContent, documentId);
+
+            if (result.Item1)
+            {
+                return Ok();
+            }
+
+            return BadRequest(result.Item2);
 
             // Check whether the project exist
 

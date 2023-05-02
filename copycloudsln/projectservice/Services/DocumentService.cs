@@ -1,6 +1,4 @@
 ﻿using Azure.Messaging.ServiceBus;
-using Azure.Storage.Blobs;
-using EmailServiceMessages;
 using Newtonsoft.Json;
 using projectlibrary;
 using projectservice.Utility;
@@ -18,7 +16,7 @@ namespace projectservice.Services
         {
             config = _config;
             this.blobStorageHelper = _blobStorageHelper;
-            busClient = new ServiceBusClient(config.GetSection("ServiceBusConfig:ConnectionString").Value);
+            busClient = new ServiceBusClient(config.GetSection("ServiceBusConfig:ConnectionStringDocument").Value);
             serviceBusSender = busClient.CreateSender("projectsavequeue");
         }
 

@@ -20,10 +20,13 @@ builder.Services.AddAzureClients(serviceAdd =>
     serviceAdd.AddServiceBusClient(builder.Configuration.GetSection("ServiceBusConfig:ConnectionString").Value);
 });
 
+builder.Services.AddScoped<IBlobStorageHelper, BlobStorageHelper>();
+builder.Services.AddScoped<IDocumentService, DocumentService>();
 builder.Services.AddSingleton<IPusherHelper, PusherHelper>();
 builder.Services.AddScoped<IProjectDbConfig, ProjectDbConfig>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectInviteService, ProjectInviteService>();
+
 
 // Add services to the container.
 builder.Services.AddSingleton<IMongoClient>(s =>

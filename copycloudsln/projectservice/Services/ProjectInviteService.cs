@@ -29,7 +29,7 @@ namespace projectservice.Services
         {
             projectDb = _dbConfig;
             config = _config;
-            busClient = new ServiceBusClient(config.GetSection("ServiceBusConfig:ConnectionString").Value);
+            busClient = new ServiceBusClient(config.GetSection("ServiceBusConfig:ConnectionStringEmail").Value);
             serviceBusSender = busClient.CreateSender("projectemailqueue");
         }
 

@@ -8,7 +8,7 @@ using System.Text;
 
 JObject config = JObject.Parse(File.ReadAllText(@"appsettings.json"));
 var connString = (string)config["ServiceBusConfig"]["ConnectionString"];
-var queue = (string)config["Azure"]["DocumentSaveQueue"];
+string queue = "projectsavequeue";
 var blobConnection = (string)config["Azure"]["ConnectionString"];
 var containerName = (string)config["Azure"]["Container"];
 

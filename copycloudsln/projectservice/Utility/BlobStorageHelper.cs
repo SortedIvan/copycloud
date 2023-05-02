@@ -4,7 +4,7 @@ using System.Text;
 
 namespace projectservice.Utility
 {
-    public class BlobStorageHelper
+    public class BlobStorageHelper : IBlobStorageHelper
     {
         private readonly IConfiguration config;
         private string connectionString;
@@ -14,8 +14,8 @@ namespace projectservice.Utility
         public BlobStorageHelper(IConfiguration _config) 
         {
             this.config = _config;
-            connectionString = config.GetSection("Azure:ConnectionString").Value.ToString();
-            containerName = config.GetSection("Azure:Container").Value.ToString();
+            connectionString = config.GetSection("BlobStorage:ConnectionString").Value.ToString();
+            containerName = config.GetSection("BlobStorage:Container").Value.ToString();
             containerClient = new BlobContainerClient(connectionString, containerName);
         }
 
@@ -54,10 +54,9 @@ namespace projectservice.Utility
                 // Write some text to the memory stream
                 using (StreamWriter writer = new StreamWriter(memoryStream))
                 {
-                       
+                    await blobClient.UploadAsync(memoryStream);
+                    return Tuple.Create(true, "Document has been succesfully created");
                 }
-                await blobClient.UploadAsync(memoryStream);
-                return Tuple.Create(true, "Document has been succesfully created");
             }
         }
 

@@ -21,8 +21,8 @@
   </ItemGroup>	
 	
   <ItemGroup>
-    <ProjectReference Include="..\..\projectlibrary\projectlibrary.csproj" />
     <ProjectReference Include="..\EmailServiceMessages\EmailServiceMessages.csproj" />
+    <ProjectReference Include="..\projectlibrary\projectlibrary.csproj" />
   </ItemGroup>
 
 </Project>
