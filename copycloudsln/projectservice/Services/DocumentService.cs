@@ -64,7 +64,7 @@ namespace projectservice.Services
                 return "";
             }
 
-            return client.DownloadContent().ToString();
+            return client.DownloadContent().Value.Content.ToString();
         }
 
     }

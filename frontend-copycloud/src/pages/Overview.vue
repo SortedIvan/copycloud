@@ -84,33 +84,42 @@
       }
     },
     async mounted(){
-      var baseUrl = window.location.origin;
-        //window.location = baseUrl+`/app/project/`
-      await this.fetchAllProjects()
+      await this.fetchAllProjects();
     },
     methods: {
-      createProject(){
-        axios.post("http://localhost:5127/api/createproject",{
-            withCredentials: true}, {"projectName":this.projectTitle, "projectDescription":this.projectDescription,"projectCreator":""})
-            .then(response => this.createdProject = response.data)
-            .catch(this.$router.push(`/app/myboard/`));
-        var baseUrl = window.location.origin;
-        window.location = baseUrl+`/app/project/${this.createdProject}`
+      async createProject(){
+        try {
+          let response =  await axios.post("http://localhost:5127/api/createproject",
+          { withCredentials: true}, {"projectName":this.projectTitle, "projectDescription":this.projectDescription,"projectCreator":""});
 
+          this.createdProject = response.data;
+          var baseUrl = window.location.origin;
+          window.location = baseUrl+`/project/${this.createdProject}`
+
+        }
+        catch {
+          console.log("Error creating a project");
+
+        }
       },
       async fetchAllProjects() {
         let data = []
-        var baseUrl = window.location.origin;
-        axios.get("http://localhost:5127/api/getallprojects",{
-            withCredentials: true
-            }).then(response => this.items = response.data)
-              .catch(console.log(baseUrl));//this.$router.push(`/app/auth/`)
-
+        
+        try {
+          let projects = await axios.get("http://localhost:5127/api/getallprojects",{ withCredentials: true});
+          this.items = projects.data;
+        }
+        catch {
+          console.log("There was an error loading the projects")
+          var baseUrl = window.location.origin;
+          window.location = baseUrl+`/auth/`
+        }
       },
       openProject(selectedproject){
         console.log("Selected project")
         console.log(this.items)
-        this.$router.push(`/app/project/${selectedproject}`)
+        this.$router.push({ path: `/project/${selectedproject}`})
+        // this.$router.push(`/app/project/${selectedproject}`)
       },
 
     }

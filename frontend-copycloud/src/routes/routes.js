@@ -11,20 +11,20 @@ const routes = [
   {
     path: '/',
     component: DashboardLayout,
-    redirect: '/app/myboard'
+    name: 'layout'
   },
   {
-    path: '/app/myboard',
+    path: '/app',
     name: 'MyBoard',
     component: Overview
   },
   {
-    path: '/app/auth',
+    path: '/auth',
     name: 'Auth',
     component: LoginRegister
   },
   {
-    path: '/app/myboard/project/*',
+    path: '/project/*',
     name: 'Project',
     component: CodoxEditor
   },

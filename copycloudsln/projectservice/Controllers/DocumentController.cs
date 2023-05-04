@@ -45,7 +45,7 @@ namespace projectservice.Controllers
         }
 
         [HttpPost("/api/savedocument")]
-        public async Task<IActionResult> SaveDocument(string documentContent, string documentId)
+        public async Task<IActionResult> SaveDocument([FromBody]string documentContent, string documentId)
         {
             // Check whether the user exists
 

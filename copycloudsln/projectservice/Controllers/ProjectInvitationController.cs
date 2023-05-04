@@ -34,7 +34,7 @@ namespace projectservice.Controllers
 
             if (result.Item1)
             {
-                return Redirect($"http://localhost:8080/app/myboard/{result.Item2}");
+                return Redirect($"http://localhost:8080/project/{result.Item2}");
             }
             return BadRequest(result);
         }

@@ -113,11 +113,11 @@
 				if (!success) {
 					this.passwordWrong = true;
 				} else {
-					this.$router.push({ path: '/app/myboard' });
+					this.$router.push({ path: '/app' });
 				}
 			}
 			catch {
-				this.$router.push({ path: '/app/auth' });
+				this.$router.push({ path: '/auth' });
 			}
 
 		},

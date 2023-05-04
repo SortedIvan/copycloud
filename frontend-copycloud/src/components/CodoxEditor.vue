@@ -40,7 +40,7 @@
 import axios from 'axios';
 
 export default {
-    created(){
+    beforeMount(){
       window.addEventListener('keydown', (event) => {
             if (event.ctrlKey) {
               this.ctrlDown = true
@@ -49,14 +49,13 @@ export default {
           });
       window.addEventListener('keyup', (event) => {
         if (event.key == 's' && this.ctrlDown) {
-          saveDocument();
+          this.saveProject();
           event.preventDefault();
         }
       });
       window.addEventListener('keyup', (event) => {
         if (event.ctrlKey) {
           this.ctrlDown = false;
-          saveDocument();
           event.preventDefault();
         }
       });
@@ -109,7 +108,7 @@ export default {
                 
                 let documentContent = await axios.get("http://localhost:5127/api/getdocumentcontent?projectId="+projectId, { withCredentials: true})
                 //editor.getText()
-                editor.setText(documentContent + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+                editor.setText(documentContent.data + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 
             }
             else {
@@ -139,15 +138,17 @@ export default {
               }
             }
             catch {
-              
+
             }
 
 
+        },
+        async saveProject(content) {
+          let result = await axios.post("http://localhost:5127/api/savedocument?documentId="+this.currentProjectId, {withCredentials:true}, {data: {"documentContent":content}});
+          console.log("saving..")
         }
     },
-    saveProject() {
-      console.log("saving..")
-    }
+
 
 };
 </script>
