@@ -4,6 +4,6 @@ namespace projectservice.Services
 {
     public interface IProjectService
     {
-        Task<bool> CreateProject(ProjectDto dto);
+        Task<Tuple<bool, string>> CreateProject(ProjectDto dto);
     }
 }

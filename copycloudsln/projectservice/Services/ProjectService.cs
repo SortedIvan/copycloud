@@ -16,15 +16,15 @@ namespace projectservice.Services
             this.documentService = _documentService;
         }
         
-        public async Task<bool> CreateProject(ProjectDto dto)
+        public async Task<Tuple<bool, string>> CreateProject(ProjectDto dto)
         {
             Tuple<bool, string> result = await projectDb.AddNewProject(dto);
             if (result.Item1)
             {
                 await documentService.CreateDocument(result.Item2); // Send the projectid to the document service
-                return true;
+                return Tuple.Create(true, result.Item2);
             }
-            return false;
+            return Tuple.Create(false, "");
         } 
     }
 }

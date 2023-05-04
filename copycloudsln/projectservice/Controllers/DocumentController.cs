@@ -80,6 +80,12 @@ namespace projectservice.Controllers
 
         }
 
+        [HttpGet("/api/getdocumentcontent")]
+        public async Task<string> GetDocumentContent(string projectId)
+        {
+            return await documentService.GetDocumentContent(projectId);
+        }
+
     }
 
 }

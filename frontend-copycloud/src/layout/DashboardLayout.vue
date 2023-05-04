@@ -6,15 +6,15 @@
       <sidebar-link to="/app/myboard">
         <p>Projects</p>
       </sidebar-link>
-      <sidebar-link to="/app/user">
+      <!-- <sidebar-link to="/app/user">
         <p>User Profile</p>
-      </sidebar-link>
+      </sidebar-link> -->
       <!-- <sidebar-link to="/admin/table-list">
         <p>Table list</p>
       </sidebar-link> -->
-      <sidebar-link to="/admin/typography">
+      <!-- <sidebar-link to="/admin/typography">
         <p>Tools</p>
-      </sidebar-link>
+      </sidebar-link> -->
       <!-- <sidebar-link to="/admin/icons">
         <p>Icons</p>
       </sidebar-link>

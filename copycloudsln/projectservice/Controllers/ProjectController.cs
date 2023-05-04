@@ -20,14 +20,30 @@ namespace projectservice.Controllers
             this.projectDb = _projectDb;
         }
 
-
+        [Authorize(Roles = "User")]
         [HttpPost("/api/createproject")]
         public async Task<IActionResult> CreateNewProject(ProjectDto projectDto)
         {
             try
             {
-                await projectService.CreateProject(projectDto);
-                return Ok("Project created succesfully");
+                var reqUserEmail = (User.Identity as ClaimsIdentity).Claims.Where(c => c.Type == "email").FirstOrDefault();
+                if (reqUserEmail == null)
+                {
+                    return BadRequest("User does not exist");
+                }
+                string projectCreator = reqUserEmail.Value;
+                projectDto.ProjectCreator = projectCreator;
+
+                Tuple<bool, string> result = await projectService.CreateProject(projectDto);
+
+                if (!result.Item1) 
+                {
+                    return BadRequest("No such project");                
+                }
+
+
+
+                return Ok(result.Item2);
             }
             catch (Exception ex)
             {

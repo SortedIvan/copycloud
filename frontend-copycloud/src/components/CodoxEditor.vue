@@ -3,11 +3,11 @@
         <nav style = "padding:5px;margin:0;font-family:Arial, Tahoma, Serif; color:#263238; height:85px">
         <h3>Title</h3>
 
-            <div class="wrapper-modal">
-                <a class="btn2" href="#demo-modal">Invite to project</a>
-            </div>
 
-            <div id="demo-modal" class="modal">
+            <a class="btn2" href="#invite-to-project">Invite to project</a>
+            
+
+            <div id="invite-to-project" class="modal">
                 <div class="modal__content">
                     <h1>Invite to project</h1>
 
@@ -40,7 +40,27 @@
 import axios from 'axios';
 
 export default {
-
+    created(){
+      window.addEventListener('keydown', (event) => {
+            if (event.ctrlKey) {
+              this.ctrlDown = true
+              event.preventDefault();
+            }
+          });
+      window.addEventListener('keyup', (event) => {
+        if (event.key == 's' && this.ctrlDown) {
+          saveDocument();
+          event.preventDefault();
+        }
+      });
+      window.addEventListener('keyup', (event) => {
+        if (event.ctrlKey) {
+          this.ctrlDown = false;
+          saveDocument();
+          event.preventDefault();
+        }
+      });
+    },
     async mounted() {
             // 1. Get the current logged in user 
             let email = await axios.get(`http://localhost:9000/api/getcurrentuser`,{
@@ -74,23 +94,27 @@ export default {
                 let editor = new Quill("#quillEditor", {theme: 'snow'});
                 //Codox configuration
                 let config = {
-                "app": "quilljs",
-                "editor": editor,
-                "docId": projectId,  //this is the unique id used to distinguish different documents 
-                "user": {"name": email.data}, //unqiue user name
-                "apiKey": "7e35dbaa-df13-4bd7-b7eb-9ab659233ee3" // this is your actual API Key
+                  "app": "quilljs",
+                  "editor": editor,
+                  "docId": projectId,  //this is the unique id used to distinguish different documents 
+                  "user": {"name": email.data}, //unqiue user name
+                  "apiKey": "7e35dbaa-df13-4bd7-b7eb-9ab659233ee3" // this is your actual API Key
                 };
                 let codox = new Codox();
 
                 //start coediting
                 codox.start(config);
                 this.editorReady = true;
-                editor.getText()
-                editor.setText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+
+                
+                let documentContent = await axios.get("http://localhost:5127/api/getdocumentcontent?projectId="+projectId, { withCredentials: true})
+                //editor.getText()
+                editor.setText(documentContent + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 
             }
             else {
-                this.$router.push(`/admin/notfound`)
+                var baseUrl = window.location.origin;
+                this.$router.push(baseUrl + `/admin/notfound`)
             }
     },
     name: 'CodoxEditor',
@@ -107,13 +131,23 @@ export default {
                     "sender": this.currentUserEmail,
                     "projectId": this.currentProjectId
                 }
-            let invitedToProject = await axios.post("http://localhost:5127/api/invitetoproject", invite, { withCredentials:true});
 
-            if (invitedToProject){
-              this.inviteSent = true;
+            try {
+              let invitedToProject = await axios.post("http://localhost:5127/api/invitetoproject", invite, { withCredentials:true});
+              if (invitedToProject){
+                this.inviteSent = true;
+              }
             }
+            catch {
+              
+            }
+
+
         }
     },
+    saveProject() {
+      console.log("saving..")
+    }
 
 };
 </script>

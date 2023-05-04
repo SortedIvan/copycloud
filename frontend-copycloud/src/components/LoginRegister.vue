@@ -11,6 +11,10 @@
 			  <input v-model="password" type="password" placeholder="Password" class="password" />
 			  <i class='bx bx-hide eye-icon'></i>
 			</div>
+			<div v-if="passwordWrong">
+				<p style="color:red">Wrong password, please try again.</p>
+			</div>
+			<br/>
 			<div class="form-link">
 			  <a href="#" class="forgot-pass">Forgot password?</a>
 			</div>
@@ -85,6 +89,8 @@
 		email: "",
 		password: "",
 		confirmPassword: "",
+		passwordWrong: false,
+		success: false
 
 	  };
 	},
@@ -97,12 +103,24 @@
 		"email": this.email
 		}, { withCredentials:true});
 	  },
-	  login(){
-		let success = axios.post("http://localhost:9000/api/login", {
-		"email": this.email,
-		"password": this.password
-		}, { withCredentials:true});
-	  },
+	  async login(){
+			try{
+				let success = await axios.post("http://localhost:9000/api/login", {
+				"email": this.email,
+				"password": this.password
+				}, { withCredentials:true});
+
+				if (!success) {
+					this.passwordWrong = true;
+				} else {
+					this.$router.push({ path: '/app/myboard' });
+				}
+			}
+			catch {
+				this.$router.push({ path: '/app/auth' });
+			}
+
+		},
 	  showSignup() {
 		this.isSignup = true;
 	  },

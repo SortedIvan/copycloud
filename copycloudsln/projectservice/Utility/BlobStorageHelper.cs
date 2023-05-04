@@ -46,7 +46,7 @@ namespace projectservice.Utility
         public async Task<Tuple<bool, string>> CreateDocumentBlob(string documentName)
         {
             // Assume that the document name has been checked if it already exists
-            BlobClient blobClient = await GetBlobClient(documentName + ".txt");
+            BlobClient blobClient = await GetBlobClient(documentName);
 
             // Create a new memory stream to hold the file contents
             using (MemoryStream memoryStream = new MemoryStream())

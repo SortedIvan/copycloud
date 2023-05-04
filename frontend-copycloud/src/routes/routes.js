@@ -4,8 +4,6 @@ import NotFound from '../pages/NotFoundPage.vue'
 
 // Admin pages
 import Overview from 'src/pages/Overview.vue'
-import UserProfile from 'src/pages/UserProfile.vue'
-import Typography from 'src/pages/Typography.vue'
 //import Project from 'src/pages/Project'
 import CodoxEditor from 'src/components/CodoxEditor.vue'
 import LoginRegister from 'src/components/LoginRegister.vue'
@@ -16,42 +14,19 @@ const routes = [
     redirect: '/app/myboard'
   },
   {
-    path: '/app',
-    component: DashboardLayout,
-    redirect: '/app/myboard',
-    children: [
-      {
-        path: 'myboard',
-        name: 'Overview',
-        component: Overview
-      },
-      {
-        path: 'user',
-        name: 'User',
-        component: UserProfile
-      },
-      {
-        path: 'typography',
-        name: 'Typography',
-        component: Typography
-      },
-      {
-        path: 'project/*',
-        name: 'Project',
-        component: CodoxEditor
-      },
-      {
-        path: 'test',
-        name: 'test',
-        component: CodoxEditor
-      },
-      {
-        path: 'auth',
-        name: 'Auth',
-        component: LoginRegister
-      }
-
-    ]
+    path: '/app/myboard',
+    name: 'MyBoard',
+    component: Overview
+  },
+  {
+    path: '/app/auth',
+    name: 'Auth',
+    component: LoginRegister
+  },
+  {
+    path: '/app/myboard/project/*',
+    name: 'Project',
+    component: CodoxEditor
   },
   { path: '*', component: NotFound }
 ]

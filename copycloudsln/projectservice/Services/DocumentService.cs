@@ -1,4 +1,5 @@
 ﻿using Azure.Messaging.ServiceBus;
+using Azure.Storage.Blobs;
 using Newtonsoft.Json;
 using projectlibrary;
 using projectservice.Utility;
@@ -52,6 +53,18 @@ namespace projectservice.Services
             // 1) Check if the document name already exists - This is mitigated for now as there can't be two of the same identifiers
 
             return await blobStorageHelper.CreateDocumentBlob(projectId);
+        }
+
+        public async Task<string> GetDocumentContent(string projectId)
+        {
+            BlobClient client = await blobStorageHelper.GetBlobClient(projectId);
+
+            if (client == null)
+            {
+                return "";
+            }
+
+            return client.DownloadContent().ToString();
         }
 
     }
