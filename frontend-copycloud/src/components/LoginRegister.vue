@@ -1,5 +1,6 @@
 <template>
-	<section class="container forms" :class="{ 'show-signup': isSignup }">
+	<div style = "background-color:#302f2d !important">
+		<section class="container forms" :class="{ 'show-signup': isSignup }" >
 	  <div class="form login">
 		<div class="form-content">
 		  <div>Login</div>
@@ -78,6 +79,8 @@
 		</div>
 	  </div>
 	</section>
+	</div>
+	
   </template>
   
   <script>
@@ -137,6 +140,12 @@
  /* Google Fonts - Poppins */
  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
+ body {
+	background-color:#302f2d !important;
+ }
+ .container .forms {
+	background-color:#302f2d !important;
+ }
 .container{
     height: 100vh;
     width: 100%;
@@ -239,8 +248,8 @@ form{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #FFF;
-    color: #8b8b8b;
+    background-color: #FFF !important;
+    color: #8b8b8b !important;
     padding: 0 15px;
 }
 .media-options a{

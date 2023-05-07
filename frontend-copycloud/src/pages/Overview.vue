@@ -1,11 +1,13 @@
 <template>
-  <div class="content">
+  <div style="height:100%; width: 100%; position:absolute; background-color: #302f2d;">
+    <div class="content">
+
     <div class="container-fluid">  
       <div class="row">
         </div>
             <div class="row-md-1" style="right:100%">
               <div class = "col">
-                <h2>My projects</h2>
+                <h2 style="font:bolder !important; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; color:white">My reports</h2>
               </div>
         </div>
 
@@ -13,7 +15,7 @@
           <div class = col-md-4>
             <stats-card  style="max-width: 600px; max-height: 600px;">
               <div slot="header" class="icon-success">
-                <h4 class="card-title">New project</h4>
+                <h4 class="card-title" > <b>New project</b></h4>
               </div>
 
               <div slot="content">
@@ -26,14 +28,14 @@
           </div>
 
           <div id="project-create" class="modal">
-                <div class="modal__content">
+                <div class="modal__content" style = "background-color: #302f2d;">
                   <input v-model="projectTitle" placeholder = "Project title" class = "input_small"/>
                   <br/>
                   <input v-model="projectDescription" placeholder = "Project description" class = "input_small"/>
                   <br/>
-                  <button class="button-9" role="button" v-on:click="createProject(false)">Create</button>
+                  <button class="button-9" role="button" v-on:click="createProject(false)" style = "background-color: !important;">Create</button>
                   <br/>
-                  <h4 style = "font-family: system-ui !important;"> or use a ready template for your next document</h4>
+                  <h4 style = "font-family: system-ui !important; color:white" > or use a ready template for your next document</h4>
                   
                   <div class = "row">
                     <div class = "col-md-6" v-for="(item,index) in templates" :key="index" v-on:click="openProject(item.id)">
@@ -48,8 +50,8 @@
                     </div>
                   </div>
 
-                  <h4 style = "font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;"> Want to add your own? Upload your md file here:</h4>
-                  <label for="file-upload" class="custom-file-upload">
+                  <h4 style = "font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;color: white;"> Want to add your own? Upload your md file here:</h4>
+                  <label for="file-upload" class="custom-file-upload" style = "color: white;">
                       Upload Template
                   </label>
                   <input v-on:change="onFileChange" id="file-upload" type="file"/>
@@ -71,7 +73,7 @@
                   <h4 class="card-title">{{ item.projectName }}</h4>
                 </div>
                 <div slot="content">
-                  <p>{{ item.projectDescription }}</p>
+                  <p style = "color:black">{{ item.projectDescription }}</p>
                   <!-- <button v-on:click="openProject(item.listing_name)"></button> -->
                 </div>
                 <div slot = "footer">
@@ -86,18 +88,23 @@
 
       </div>
     </div>
+
+  </div>
+  
 </template>
 <script>
   import ChartCard from 'src/components/Cards/ChartCard.vue'
   import StatsCard from 'src/components/Cards/StatsCard.vue'
   import LTable from 'src/components/Table.vue'
   import axios from 'axios';
+  import SidepanelComponent from '../components/SidepanelComponent.vue';
   import { ref } from "vue";
   export default {
     components: {
       LTable,
       ChartCard,
-      StatsCard
+      StatsCard,
+      SidepanelComponent
     },
     data () {
       return {
@@ -169,8 +176,8 @@
         
         console.log(response.data)
 
-        if (response.data[0]) {
-          this.$router.push({ path: `/project/${response.data[1]}`})  
+        if (response.data.item1) {
+          this.$router.push({ path: `/project/${response.data.item2}`})  
         }
 
       },
@@ -339,7 +346,7 @@
   border-radius: 4px;
   position: relative;
   width: 700px !important;
-  height: 600px;
+  height: 700px !important;
   background: #fff;
   padding: 1em 2em;
 }
@@ -373,5 +380,28 @@
 	 letter-spacing: 0.15ch;
    font-family: system-ui !important;
 }
+
+
+
+  p {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  h1 {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  h2 {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  h3 {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  h4 {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+
 
 </style>

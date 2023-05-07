@@ -22,5 +22,9 @@ namespace projectservice.Data
         Task<List<string>> GetAllUsersInProject(string projectId);
         Task<bool> CheckProjectExists(string projectId);
         Task<bool> CheckUserInProject(string userEmail, string projectId);
+        Task<bool> CreateProjectInvitationForLink(ProjectInvitationDto inviteDto, string secret);
+        Task<ProjectInvitationLink> GetProjectInvitationLink(string projectId, string secret);
+        Task<bool> CheckProjectInviteLinkExists(string projectId, string secret);
+        Task<bool> DeleteProjectByProjectId(string projectId);
     }
 }

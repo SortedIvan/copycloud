@@ -1,7 +1,7 @@
 <template>
-  <nav class="navbar navbar-expand-lg">
+  <nav class="navbar navbar-expand-lg" style="background-color: #302f2d">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Copycloud</a>
+      <a class="navbar-brand" href="#"></a>
       <button type="button"
               class="navbar-toggler navbar-toggler-right"
               :class="{toggled: $sidebar.showSidebar}"
@@ -15,7 +15,7 @@
       </button>
       <div class="collapse navbar-collapse justify-content-end">
         <ul class="nav navbar-nav mr-auto">
-          <base-dropdown tag="li">
+          <!-- <base-dropdown tag="li">
             <template slot="title">
               <i class="nc-icon nc-bell-55"></i>
               <b class="caret"></b>
@@ -26,7 +26,7 @@
             <a class="dropdown-item" href="#">Notification 3</a>
             <a class="dropdown-item" href="#">Notification 4</a>
             <a class="dropdown-item" href="#">Another notification</a>
-          </base-dropdown>
+          </base-dropdown> -->
         </ul>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">

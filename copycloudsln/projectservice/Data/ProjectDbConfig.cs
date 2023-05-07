@@ -4,6 +4,7 @@ using projectservice.Models;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Xml;
 
 namespace projectservice.Data
 {
@@ -12,6 +13,7 @@ namespace projectservice.Data
         private readonly IConfiguration config;
         private readonly IMongoCollection<ProjectModel> projects;
         private readonly IMongoCollection<ProjectInviteModel> projectInvites;
+        private readonly IMongoCollection<ProjectInvitationLink> projectInviteLinks;
         public ProjectDbConfig(IConfiguration _config, IMongoClient mongoClient)
         {
             this.config = _config;
@@ -20,6 +22,7 @@ namespace projectservice.Data
             // Db settings
             projects = db.GetCollection<ProjectModel>(config.GetSection("ProjectDbSettings:ProjectDbCollection").Value);
             projectInvites = db.GetCollection<ProjectInviteModel>(config.GetSection("ProjectDbSettings:ProjectInviteDbCollection").Value);
+            projectInviteLinks = db.GetCollection<ProjectInvitationLink>(config.GetSection("ProjectDbSettings:ProjectInviteLinkDbCollection").Value);
 
         }
 
@@ -136,6 +139,21 @@ namespace projectservice.Data
             }
         }
 
+        public async Task<ProjectInvitationLink> GetProjectInvitationLink(string projectId, string secret)
+        {
+            try
+            {
+                ProjectInvitationLink exists = await projectInviteLinks.Find(x => x.ProjectId == projectId && x.Secret == secret).FirstAsync();
+
+                return exists;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
         public async Task<bool> CreateProjectInvitation(ProjectInvitationDto inviteDto, string secret)
         {
             try
@@ -150,6 +168,38 @@ namespace projectservice.Data
                         Secret= secret
                     });
                 return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> CreateProjectInvitationForLink(ProjectInvitationDto inviteDto, string secret)
+        {
+            try
+            {
+                var indexModel = new CreateIndexModel<ProjectInvitationLink>(
+                keys: Builders<ProjectInvitationLink>.IndexKeys.Ascending("ExpireAt"),
+                options: new CreateIndexOptions
+                {
+                    ExpireAfter = TimeSpan.FromSeconds(300),
+                    Name = "ExpireAtIndex"
+                });
+                projectInviteLinks.Indexes.CreateOne(indexModel);
+
+                await this.projectInviteLinks.InsertOneAsync(
+                    new ProjectInvitationLink
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        ProjectId = inviteDto.ProjectId,
+                        Sender = inviteDto.Sender,
+                        Secret = secret,
+                        ExpireAt = DateTime.Now.AddSeconds(240)
+                    });
+                return true;
+
+
             }
             catch (Exception ex)
             {
@@ -245,6 +295,39 @@ namespace projectservice.Data
             {
                 Debug.WriteLine(ex.Message);
                 return null;
+            }
+        }
+
+        public async Task<bool> CheckProjectInviteLinkExists(string projectId, string secret)
+        {
+            try
+            {
+                var exists = await projectInviteLinks.FindAsync(x => x.Secret == secret && x.ProjectId == projectId).Result.ToListAsync();
+                if (exists.Count > 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return true;
+            }
+        }
+
+        public async Task<bool> DeleteProjectByProjectId(string projectId)
+        {
+            try
+            {
+                var filter = Builders<ProjectModel>.Filter.Eq(s => s.Id, projectId);
+                await this.projects.DeleteOneAsync(filter);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
         }
     }

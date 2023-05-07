@@ -1,5 +1,6 @@
 ﻿using Azure.Messaging.ServiceBus;
 using EmailServiceMessages;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using projectservice.Data;
 using projectservice.Dto;
@@ -33,6 +34,50 @@ namespace projectservice.Services
             serviceBusSender = busClient.CreateSender("projectemailqueue");
         }
 
+        public async Task<string> CreateProjectInvite(ProjectInvitationDto inviteDto)
+        {
+            try
+            {
+                Tuple<string, string> tokenBaseSecretPair = InvitationTokenUtil.CreateInvitationForLink(inviteDto.ProjectId, inviteDto.Sender);
+
+                bool success = await projectDb.CreateProjectInvitationForLink(inviteDto, tokenBaseSecretPair.Item2);
+
+                if (success)
+                {
+                    return InvitationTokenUtil.Base64Encode(tokenBaseSecretPair.Item1);
+                }
+
+                return "";
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return "";
+            }
+        }
+        //{sender}:{projectId}:{secret}
+        public async Task<Tuple<bool, string>> ConsumeInviteLink(string token, string email)
+        {
+            string baseDecodedToken = InvitationTokenUtil.Base64Decode(token);
+            Tuple<string, string, string> result = InvitationTokenUtil.ParseInviteLink(baseDecodedToken);
+
+            string sender = result.Item1;
+            string projectId = result.Item2;
+            string secret = result.Item3;
+
+            //ProjectInvitationLink link = await projectDb.GetProjectInvitationLink(projectId, secret);
+
+            bool inviteValid = await projectDb.CheckProjectInviteLinkExists(projectId, secret);
+
+            if (!inviteValid)
+            {
+                return Tuple.Create(false, "Error with link");
+            }
+            
+            await projectDb.AddUserToProject(projectId, email);
+
+            return Tuple.Create(true, projectId);
+        }
 
         public async Task<bool> SendInvite(ProjectInvitationDto inviteDto)
         {

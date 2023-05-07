@@ -11,12 +11,17 @@ const routes = [
   {
     path: '/',
     component: DashboardLayout,
-    redirect: '/app'
-  },
-  {
-    path: '/app',
-    name: 'MyBoard',
-    component: Overview
+    children: [
+      // UserHome will be rendered inside User's <router-view>
+      // when /user/:id is matched
+      {
+        path: '/app',
+        name: 'MyBoard',
+        component: Overview
+      }
+
+      // ...other sub routes
+    ]
   },
   {
     path: '/auth',

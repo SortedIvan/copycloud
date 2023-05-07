@@ -1,30 +1,20 @@
 <template>
-  <div class="wrapper">
-    <side-bar>
+  <div  class="wrapper">
+    <side-bar data-color = "black">
       <mobile-menu slot="content"></mobile-menu>
-      <!-- <button class="button-9" role="button" >Create new project</button> -->
-      <sidebar-link to="/app/myboard">
-        <p>Projects</p>
+        <h4 style = "font:bold; color:white; margin:70px !important;">Workspace 1</h4>
+      <br/>
+      <br/>
+      <br/>
+      <sidebar-link to="/app">
+        <p>Reports</p>
       </sidebar-link>
-      <!-- <sidebar-link to="/app/user">
-        <p>User Profile</p>
-      </sidebar-link> -->
-      <!-- <sidebar-link to="/admin/table-list">
-        <p>Table list</p>
-      </sidebar-link> -->
-      <!-- <sidebar-link to="/admin/typography">
-        <p>Tools</p>
-      </sidebar-link> -->
-      <!-- <sidebar-link to="/admin/icons">
-        <p>Icons</p>
+      <br/>
+      <sidebar-link to="/explore">
+        <p>Explore</p>
       </sidebar-link>
-      <sidebar-link to="/admin/maps">
-        <p>Maps</p>
-      </sidebar-link>
-      <sidebar-link to="/admin/notifications">
-        <p>Notifications</p>
-      </sidebar-link> -->
 
+      
     </side-bar>
     <div class="main-panel">
       <top-navbar></top-navbar>
@@ -38,6 +28,10 @@
   </div>
 </template>
 <style lang="scss">
+
+.wrapper {
+  color:aliceblue !important;
+}
 
 </style>
 <script>

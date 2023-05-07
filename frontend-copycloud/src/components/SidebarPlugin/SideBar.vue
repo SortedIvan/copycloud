@@ -4,16 +4,11 @@
        :data-color="backgroundColor"
        :data-image="backgroundImage">
     <div class="sidebar-wrapper">
-      <div class="logo">
-        <a href="#" class="simple-text logo__container">
-          <img src="https://i.imgur.com/fhvgf2p.png" class="image-fit" >
-        </a>
-      </div>
       <slot name="content"></slot>
       <ul class="nav nav-main__links">
         <!--By default vue-router adds an active class to each route link. This way the links are colored when clicked-->
         <slot>
-          <sidebar-link v-for="(link,index) in sidebarLinks"
+          <sidebar-link class = "sidebarLinkItem" v-for="(link,index) in sidebarLinks"
                         :key="link.name + index"
                         :to="link.path"
                         @click="closeNavbar"
@@ -92,4 +87,6 @@
  .sidebar .sidebar-wrapper .logo .logo__container {
    padding-left: 10px;
  }
+
+
 </style>

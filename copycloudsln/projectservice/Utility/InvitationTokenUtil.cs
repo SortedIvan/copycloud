@@ -15,6 +15,15 @@ namespace projectservice.Utility
             return Tuple.Create(tokenBase, secret);
         }
 
+        //{sender}:{projectId}:{secret}
+        public static Tuple<string, string> CreateInvitationForLink(string projectId, string sender)
+        {
+            string tokenBase = $"{sender};{projectId}";
+            string secret = Guid.NewGuid().ToString();
+            tokenBase += $";{secret}";
+            return Tuple.Create(tokenBase, secret);
+        }
+
         public static Tuple<string, string, string, string> ParseInviteToken(string token)
         {
             string[] words = token.Split(';');
@@ -23,7 +32,15 @@ namespace projectservice.Utility
             string projectInvitedToId = words[2];
             string secret = words[3];
             return Tuple.Create(inviteeEmail, sender, projectInvitedToId, secret);
-            
+        }
+
+        public static Tuple<string, string, string> ParseInviteLink(string token)
+        {
+            string[] words = token.Split(';');
+            string sender = words[0];
+            string projectId = words[1];
+            string secret = words[2];
+            return Tuple.Create(sender, projectId, secret);
         }
 
         public static string Base64Encode(string plainText)
