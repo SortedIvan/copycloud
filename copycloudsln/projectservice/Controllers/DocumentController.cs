@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using projectlibrary;
 using projectservice.Data;
+using projectservice.Dto;
 using projectservice.Services;
 using projectservice.Utility;
 using System.Security.Claims;
@@ -25,27 +27,15 @@ namespace projectservice.Controllers
         [HttpPost("/api/authenticatepusher")]
         public async Task<IActionResult> AuthenticateToPusher()
         {
-            //var reqUserEmail = (User.Identity as ClaimsIdentity).Claims.Where(c => c.Type == "email").FirstOrDefault();
-            //var reqUserId = (User.Identity as ClaimsIdentity).Claims.Where(c => c.Type == "user_id").FirstOrDefault();
-
-            //if (reqUserEmail == null)
-            //{
-            //    return BadRequest("No such user exists. Please log in or refresh the page.");
-            //}
-            
-            //string userEmail = reqUserEmail.Value;
-            //string userId = reqUserId.Value;
-
             var channel_name = HttpContext.Request.Form["channel_name"];
             var socket_id = HttpContext.Request.Form["socket_id"];
-            //var channel_name = channel_name;
-            //var socket_id = socket_id
             string result = await pusherHelper.AuthenticatePusher(channel_name, socket_id, "123", "user");
             return Ok(result);
         }
 
+        [Authorize(Roles = "User")]
         [HttpPost("/api/savedocument")]
-        public async Task<IActionResult> SaveDocument([FromBody]string documentContent, string documentId)
+        public async Task<IActionResult> SaveDocument(DocumentSaveDto save)
         {
             // Check whether the user exists
 
@@ -62,12 +52,12 @@ namespace projectservice.Controllers
 
             //projectDb.Get
 
-            if (!await projectDb.CheckProjectExists(documentId))
+            if (!await projectDb.CheckProjectExists(save.ProjectId))
             {
                 return BadRequest("Document does not exist. Please retry.");
             }
 
-            Tuple<bool, string> result = await this.documentService.SaveDocument(documentContent, documentId);
+            Tuple<bool, string> result = await this.documentService.SaveDocument(save.Content, save.ProjectId);
 
             if (result.Item1)
             {
@@ -85,6 +75,8 @@ namespace projectservice.Controllers
         {
             return await documentService.GetDocumentContent(projectId);
         }
+
+
 
     }
 

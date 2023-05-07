@@ -30,10 +30,36 @@
                   <input v-model="projectTitle" placeholder = "Project title" class = "input_small"/>
                   <br/>
                   <input v-model="projectDescription" placeholder = "Project description" class = "input_small"/>
-                    <br>
-                    <div class="modal__footer">
-                      <button class="button-9" role="button" v-on:click="createProject()">Create</button>
+                  <br/>
+                  <button class="button-9" role="button" v-on:click="createProject(false)">Create</button>
+                  <br/>
+                  <h4 style = "font-family: system-ui !important;"> or use a ready template for your next document</h4>
+                  
+                  <div class = "row">
+                    <div class = "col-md-6" v-for="(item,index) in templates" :key="index" v-on:click="openProject(item.id)">
+                        <stats-card  class = "projectCard" style="max-width: 600px; max-height: 600px;
+                          align-items: center !important; align-content: center !important; text-align: center !important;
+                          ">
+                          <div slot="footer">
+                            <p style = "font-weight: bold; color:black !important">{{ item.templateName }}</p>
+                          </div>
+
+                      </stats-card>
                     </div>
+                  </div>
+
+                  <h4 style = "font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;"> Want to add your own? Upload your md file here:</h4>
+                  <label for="file-upload" class="custom-file-upload">
+                      Upload Template
+                  </label>
+                  <input v-on:change="onFileChange" id="file-upload" type="file"/>
+                  
+
+                  <br>
+                  <div class="modal__footer">
+                    
+                  </div>
+
 
                       <a href="#" class="modal__close">&times;</a>
                   </div>
@@ -66,6 +92,7 @@
   import StatsCard from 'src/components/Cards/StatsCard.vue'
   import LTable from 'src/components/Table.vue'
   import axios from 'axios';
+  import { ref } from "vue";
   export default {
     components: {
       LTable,
@@ -80,22 +107,27 @@
         items: [],
         projectTitle: "",
         projectDescription: "",
-        createdProject: ""
+        createdProject: "",
+        templates: [{templateName: "Code4rena Report Style", templateContent: "<h4> Remove all the bugs! </h4>"},
+                    {templateName: "Sherloc Report Style", templateContent: "<h4> Remove all the bugs! </h4>"},
+                   ],
+        fileToUpload: ""
       }
     },
     async mounted(){
       await this.fetchAllProjects();
     },
     methods: {
-      async createProject(){
+      async createProject(withTemplate){
         try {
-          let response =  await axios.post("http://localhost:5127/api/createproject",
-          { withCredentials: true}, {"projectName":this.projectTitle, "projectDescription":this.projectDescription,"projectCreator":""});
-
+          let project = {"projectName":this.projectTitle, "projectDescription":this.projectDescription,"projectCreator":""}
+          const response = await axios.post('http://localhost:5127/api/createproject', project, { withCredentials: true, headers: { Accept: '*/*' } });
           this.createdProject = response.data;
           var baseUrl = window.location.origin;
-          window.location = baseUrl+`/project/${this.createdProject}`
 
+          if (!withTemplate) {
+            window.location = baseUrl+`/project/${this.createdProject}`
+          }
         }
         catch {
           console.log("Error creating a project");
@@ -121,11 +153,49 @@
         this.$router.push({ path: `/project/${selectedproject}`})
         // this.$router.push(`/app/project/${selectedproject}`)
       },
+      async createProjectWithTemplate() {
+        if (this.projectTitle === "") {
+          return;
+        }
+        const FormData = require('form-data');
 
+        const uploadData = new FormData();
+        uploadData.append('ProjectName', this.projectTitle);
+        uploadData.append('ProjectDescription', this.projectDescription);
+        uploadData.append('ProjectCreator', "remove");
+        uploadData.append('Template', this.fileToUpload);
+
+        let response = await axios.post('http://localhost:5127/api/createprojectwithtemplate', uploadData, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } });
+        
+        console.log(response.data)
+
+        if (response.data[0]) {
+          this.$router.push({ path: `/project/${response.data[1]}`})  
+        }
+
+      },
+      async onFileChange(e) {
+        const selectedFile = e.target.files[0]; // accessing file
+        this.fileToUpload = selectedFile;
+
+        this.createProjectWithTemplate();
+
+      },
     }
   }
 </script>
 <style>
+    input[type="file"] {
+        display: none;
+    }
+
+    .custom-file-upload {
+      border: 1px solid #ccc;
+      display: inline-block;
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+
     .button-9{  padding: 1rem 3rem;
     text-align: center;
     font-size: 16px;
@@ -268,14 +338,14 @@
 .modal__content {
   border-radius: 4px;
   position: relative;
-  width: 500px;
-  max-width: 90%;
+  width: 700px !important;
+  height: 600px;
   background: #fff;
   padding: 1em 2em;
 }
 
 .modal__footer {
-  text-align: right;
+  text-align: left !important;
 }
 
 .modal__footer i {
@@ -294,13 +364,14 @@
 }
 
 .input_small {
-	 display: block;
+	 display: inline-block;
 	 border: none;
 	 padding: 0;
 	 width: 38ch;
 	 background: repeating-linear-gradient(90deg, dimgrey 0, dimgrey 1ch, transparent 0, transparent 0ch) 0 100%/ 58ch 1px no-repeat;
 	 font: 2.4ch droid sans mono, consolas, monospace;
 	 letter-spacing: 0.15ch;
+   font-family: system-ui !important;
 }
 
 </style>

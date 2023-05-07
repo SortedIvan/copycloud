@@ -1,7 +1,7 @@
 <template>
     <div>
         <nav style = "padding:5px;margin:0;font-family:Arial, Tahoma, Serif; color:#263238; height:85px">
-        <h3>Title</h3>
+        <h3>{{this.projectTitle}}</h3>
 
 
             <a class="btn2" href="#invite-to-project">Invite to project</a>
@@ -44,11 +44,12 @@ export default {
       window.addEventListener('keydown', (event) => {
             if (event.ctrlKey) {
               this.ctrlDown = true
+              console.log(ctrlDown)
               event.preventDefault();
             }
           });
       window.addEventListener('keyup', (event) => {
-        if (event.key == 's' && this.ctrlDown) {
+        if (event.key === 's' && this.ctrlDown) {
           this.saveProject();
           event.preventDefault();
         }
@@ -107,9 +108,15 @@ export default {
 
                 
                 let documentContent = await axios.get("http://localhost:5127/api/getdocumentcontent?projectId="+projectId, { withCredentials: true})
-                //editor.getText()
-                editor.setText(documentContent.data + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 
+                let projectDetails = await axios.get("http://localhost:5127/api/getprojectbyid?projectId="+projectId, {withCredentials: true});
+                if (editor.getText() === "") {
+                  editor.setText(documentContent.data + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+                  return;
+                }
+                editor.setText(documentContent.data)
+                
+                this.projectTitle = projectDetails.data.projectName;
             }
             else {
                 var baseUrl = window.location.origin;
@@ -121,7 +128,7 @@ export default {
     components: {
     },
     data() {
-    return { content: '', currentProjectId: "",currentUserEmail: "", editorReady: false, document, inviteSent:false, inviteEmail: "" }
+    return { content: '', currentProjectId: "",currentUserEmail: "", editorReady: false, document, inviteSent:false, inviteEmail: "",projectTitle: "" }
     },
     methods: {
         async sendInvite(){
@@ -140,12 +147,15 @@ export default {
             catch {
 
             }
-
-
         },
         async saveProject(content) {
-          let result = await axios.post("http://localhost:5127/api/savedocument?documentId="+this.currentProjectId, {withCredentials:true}, {data: {"documentContent":content}});
-          console.log("saving..")
+
+          let save = {
+            "projectId": this.currentProjectId,
+            "content": content
+          }
+          let response = await axios.post('http://localhost:5127/api/savedocument', save, { withCredentials: true, headers: { Accept: '*/*' } });
+          console.log(response.data)
         }
     },
 
@@ -247,9 +257,12 @@ transform: translateZ(0);
 transition-duration: 0.5s;
 transition-timing-function: cubic-bezier(0.39, 0.5, 0.15, 1.36);
 font-family: "Futura PT", "Futura", sans-serif;
-height: 55px;
+height: 50px;
 width: 200px;
-margin:15px;
+margin:10px;
+display:flex;
+justify-content: center;
+align-items: center;
 }
 
 .btn2:hover,

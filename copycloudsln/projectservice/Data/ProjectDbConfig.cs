@@ -233,5 +233,19 @@ namespace projectservice.Data
                 return false;
             }
         }
+
+        public async Task<ProjectModel> GetProjectByProjectId(string projectId)
+        {
+            try
+            {
+                ProjectModel project = await projects.Find(x => x.Id == projectId).FirstOrDefaultAsync();
+                return project;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return null;
+            }
+        }
     }
 }

@@ -10,6 +10,7 @@ namespace projectservice.Data
         IMongoCollection<ProjectInviteModel> GetProjectInvites();
         Task<List<ProjectModel>> GetAllProjectsByCreator(string userEmail);
         Task<ProjectModel> GetProjectByCreator(string userEmail, string projectId);
+        Task<ProjectModel> GetProjectByProjectId(string projectId);
         Task<List<ProjectModel>> GetAllJoinedProjects(string userEmail);
         Task<bool> AddUserToProject(string projectId, string userEmail);
         Task<ProjectInviteModel> GetProjectInviteById(string inviteId);

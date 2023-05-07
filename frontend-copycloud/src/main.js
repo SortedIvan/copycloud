@@ -27,6 +27,7 @@ import routes from "./routes/routes";
 
 import "./registerServiceWorker";
 // plugin setup
+
 Vue.use(VueRouter);
 Vue.use(LightBootstrap);
 
@@ -34,6 +35,7 @@ Vue.use(LightBootstrap);
 // configure router
 const router = new VueRouter({
   routes, // short for routes: routes
+  mode:'history',
   linkActiveClass: "nav-item active",
   scrollBehavior: (to) => {
     if (to.hash) {

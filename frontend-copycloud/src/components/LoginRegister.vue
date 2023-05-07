@@ -2,12 +2,12 @@
 	<section class="container forms" :class="{ 'show-signup': isSignup }">
 	  <div class="form login">
 		<div class="form-content">
-		  <header>Login</header>
+		  <div>Login</div>
 		  <form>
-			<div class="field input-field">
+			<div class="field-auth input-field-auth">
 			  <input v-model="email" type="email" placeholder="Email" class="input" />
 			</div>
-			<div class="field input-field">
+			<div class="field-auth input-field-auth">
 			  <input v-model="password" type="password" placeholder="Password" class="password" />
 			  <i class='bx bx-hide eye-icon'></i>
 			</div>
@@ -18,8 +18,8 @@
 			<div class="form-link">
 			  <a href="#" class="forgot-pass">Forgot password?</a>
 			</div>
-			<div class="field button-field">
-			  <button v-on:click="login()">Login</button>
+			<div class="field-auth button-field-auth">
+			  <button type = "button" v-on:click="login()">Login</button>
 			</div>
 		  </form>
 		  <div class="form-link">
@@ -28,13 +28,13 @@
 		</div>
 		<div class="line"></div>
 		<div class="media-options">
-		  <a href="#" class="field facebook">
+		  <a href="#" class="field-auth facebook">
 			<i class='bx bxl-facebook facebook-icon'></i>
 			<span>Login with Facebook</span>
 		  </a>
 		</div>
 		<div class="media-options">
-		  <a href="#" class="field google">
+		  <a href="#" class="field-auth google">
 			<img src="#" alt="" class="google-img" />
 			<span>Login with Google</span>
 		  </a>
@@ -43,19 +43,19 @@
   
 	  <div class="form signup">
 		<div class="form-content">
-		  <header>Signup</header>
+		  <div>Signup</div>
 		  <form>
-			<div class="field input-field">
+			<div class="field-auth input-field-auth">
 			  <input v-model="email" type="email" placeholder="Email" class="input" />
 			</div>
-			<div class="field input-field">
+			<div class="field-auth input-field-auth">
 			  <input v-model="password" type="password" placeholder="Create password" class="password" />
 			</div>
-			<div class="field input-field">
+			<div class="field-auth input-field-auth">
 			  <input v-model="confirmPassword" type="password" placeholder="Confirm password" class="password" />
 			  <i class='bx bx-hide eye-icon'></i>
 			</div>
-			<div class="field button-field">
+			<div class="field-auth button-field-auth">
 			  <button v-on:click="register()">Signup</button>
 			</div>
 		  </form>
@@ -65,13 +65,13 @@
 		</div>
 		<div class="line"></div>
 		<div class="media-options">
-		  <a href="#" class="field facebook">
+		  <a href="#" class="field-auth facebook">
 			<i class='bx bxl-facebook facebook-icon'></i>
 			<span>Login with Facebook</span>
 		  </a>
 		</div>
 		<div class="media-options">
-		  <a href="#" class="field google">
+		  <a href="#" class="field-auth google">
 			<img src="#" alt="" class="google-img" />
 			<span>Login with Google</span>
 		  </a>
@@ -105,19 +105,22 @@
 	  },
 	  async login(){
 			try{
-				let success = await axios.post("http://localhost:9000/api/login", {
+			let loginCreds = {
 				"email": this.email,
 				"password": this.password
-				}, { withCredentials:true});
+			}
+			let success = await axios.post("http://localhost:9000/api/login", loginCreds, {headers: { Accept: '*/*' }, withCredentials: true});
 
-				if (!success) {
-					this.passwordWrong = true;
-				} else {
-					this.$router.push({ path: '/app' });
-				}
+			if (success.status != 200) {
+				this.passwordWrong = true;
+			} else {
+				var baseUrl = window.location.origin;
+				window.location = baseUrl + '/app'
+			}
 			}
 			catch {
-				this.$router.push({ path: '/auth' });
+				console.log("error n")
+				//this.$router.push({ path: '/auth' });
 			}
 
 		},
@@ -166,15 +169,15 @@
 form{
     margin-top: 30px;
 }
-.form .field{
+.form .field-auth{
     position: relative;
     height: 50px;
     width: 100%;
     margin-top: 20px;
     border-radius: 6px;
 }
-.field input,
-.field button{
+.field-auth input,
+.field-auth button{
     height: 100%;
     width: 100%;
     border: none;
@@ -182,12 +185,12 @@ form{
     font-weight: 400;
     border-radius: 6px;
 }
-.field input{
+.field-auth input{
     outline: none;
     padding: 0 15px;
     border: 1px solid#CACACA;
 }
-.field input:focus{
+.field-auth input:focus{
     border-bottom-width: 2px;
 }
 .eye-icon{
@@ -200,13 +203,13 @@ form{
     cursor: pointer;
     padding: 5px;
 }
-.field button{
+.field-auth button{
     color: #fff;
     background-color: #0171d3;
     transition: all 0.3s ease;
     cursor: pointer;
 }
-.field button:hover{
+.field-auth button:hover{
     background-color: #016dcb;
 }
 .form-link{
