@@ -9,8 +9,8 @@ services:
       image: ${DOCKER_REGISTRY-}userservice
       build:
         context: .\userservice
-      environment:
-        - GOOGLE_APPLICATION_CREDENTIALS=firebase-config.json
+        secrets:
+          - google_creds
       networks:
         - backend
     contentservice:
@@ -18,10 +18,12 @@ services:
         image: ${DOCKER_REGISTSTRY-}contentservice
         build:
             context: .\contentservice
+        secrets:
+            - google_creds
         networks:
             - backend
-        environment:
-            - GOOGLE_APPLICATION_CREDENTIALS=firebase-config.json
+        #environment:
+        #    - GOOGLE_APPLICATION_CREDENTIALS=firebase-config.json
     apigateway:
         container_name: api-gateway
         image: ${DOCKER_REGISTRY-}apigateway
@@ -32,4 +34,7 @@ services:
             - 8001:80
         networks:
             - backend
-
+secrets: # Securing the configuration files
+  google_creds:
+    environment: 
+       GOOGLE_APPLICATION_CREDENTIALS=firebase-config.json

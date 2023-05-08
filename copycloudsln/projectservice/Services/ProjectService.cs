@@ -40,15 +40,16 @@ namespace projectservice.Services
                 
                 if (project.ProjectCreator != userRequesting)
                 {
-                    return Tuple.Create(false, "User is not the creator of the project");
+                    return Tuple.Create(false, "User is not the creator of the project" + project.ProjectCreator);
                 }
 
                 bool projectDeletedSuccesfully = await this.projectDb.DeleteProjectByProjectId(projectId);
 
                 try
                 {
-                    BlobClient blob = await this.blobStorage.GetBlobClient(projectId + ".txt");
+                    BlobClient blob = await this.blobStorage.GetBlobClient(projectId);
                     await blob.DeleteAsync();
+                    return Tuple.Create(projectDeletedSuccesfully, "Project deleted succesfully");
                 }
                 catch (Exception ex)
                 {

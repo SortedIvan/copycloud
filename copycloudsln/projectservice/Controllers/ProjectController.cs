@@ -117,6 +117,36 @@ namespace projectservice.Controllers
             return await projectDb.CheckProjectExists(projectId);
         }
 
+        [Authorize(Roles = "User")]
+        [HttpPost("/api/deleteproject")]
+        public async Task<IActionResult> DeleteProject(string projectId)
+        {
+            var reqUserId = (User.Identity as ClaimsIdentity).Claims.Where(c => c.Type == "id").FirstOrDefault();
+            var reqUserEmail = (User.Identity as ClaimsIdentity).Claims.Where(c => c.Type == "email").FirstOrDefault();
+            if (reqUserId == null)
+            {
+                return BadRequest("User not logged in or does not exist" + reqUserEmail + "is the email");
+            }
+
+            string userId = reqUserId.Value;
+            string userEmail = reqUserEmail.Value;
+
+            Tuple<bool, string> result = await projectService.DeleteProject(projectId, userEmail);
+
+            if (result.Item1)
+            {
+                return Ok("Project deleted succesfully.");
+            }
+
+            return BadRequest("There was an error: " + result.Item2 + userEmail);
+
+
+        }
+
+
+
+
+
         [Authorize(Roles ="User")]
         [HttpGet("/api/auth/authorizationtestproject")]
         public async Task<string> TestProjectAuth()

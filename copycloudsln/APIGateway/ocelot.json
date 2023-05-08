@@ -1,5 +1,6 @@
 {
   "Routes": [
+    // <-------------------- USER SERVICE ---------------------------->
     {
       "UpstreamPathTemplate": "/api/login",
       "UpstreamHttpMethod": [ "Post" ],
@@ -12,41 +13,9 @@
         }
       ],
       "LoadBalancerOptions": {
-        "Type": "LeastConnection"
+        "Type": "RoundRobin"
       },
       "DownstreamPathTemplate": "/api/login"
-    },
-    {
-      "UpstreamPathTemplate": "/api/testgatewayuser",
-      "UpstreamHttpMethod": [ "Get" ],
-
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "userservice",
-          "Port": 80
-        }
-      ],
-      "LoadBalancerOptions": {
-        "Type": "LeastConnection"
-      },
-      "DownstreamPathTemplate": "/api/testgatewayuser"
-    },
-    {
-      "UpstreamPathTemplate": "/api/testgatewaycontent",
-      "UpstreamHttpMethod": [ "Get" ],
-
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "contentservice",
-          "Port": 80
-        }
-      ],
-      "LoadBalancerOptions": {
-        "Type": "LeastConnection"
-      },
-      "DownstreamPathTemplate": "/api/testgatewaycontent"
     },
     {
       "UpstreamPathTemplate": "/api/register",
@@ -60,9 +29,138 @@
         }
       ],
       "LoadBalancerOptions": {
-        "Type": "LeastConnection"
+        "Type": "RoundRobin"
       },
       "DownstreamPathTemplate": "/api/register"
+    },
+    {
+      "UpstreamPathTemplate": "/api/getcurrentuser",
+      "UpstreamHttpMethod": [ "Post" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "userservice",
+          "Port": 80
+        }
+      ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "DownstreamPathTemplate": "/api/getcurrentuser"
+    },
+    // <-------------------- PROJECT SERVICE ---------------------------->
+    {
+      "UpstreamPathTemplate": "/api/createproject",
+      "UpstreamHttpMethod": [ "Get" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "projectservice",
+          "Port": 80
+        }
+      ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "DownstreamPathTemplate": "/api/createproject"
+    },
+    {
+      "UpstreamPathTemplate": "/api/getallprojects",
+      "UpstreamHttpMethod": [ "Get" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "projectservice",
+          "Port": 80
+        }
+      ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "DownstreamPathTemplate": "/api/getallprojects"
+    },
+    {
+      "UpstreamPathTemplate": "/api/getprojectbyid",
+      "UpstreamHttpMethod": [ "Post" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "projectservice",
+          "Port": 80
+        }
+      ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "DownstreamPathTemplate": "/api/getprojectbyid"
+    },
+    {
+      "UpstreamPathTemplate": "/api/checkuserinproject",
+      "UpstreamHttpMethod": [ "Post" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "projectservice",
+          "Port": 80
+        }
+      ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "DownstreamPathTemplate": "/api/checkuserinproject"
+    },
+    {
+      "UpstreamPathTemplate": "/api/checkprojectexists",
+      "UpstreamHttpMethod": [ "Post" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "projectservice",
+          "Port": 80
+        }
+      ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "DownstreamPathTemplate": "/api/checkprojectexists"
+    },
+    {
+      "UpstreamPathTemplate": "/api/deleteproject",
+      "UpstreamHttpMethod": [ "Post" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "projectservice",
+          "Port": 80
+        }
+      ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "DownstreamPathTemplate": "/api/deleteproject"
+    },
+    {
+      "UpstreamPathTemplate": "/api/createprojectwithtemplate",
+      "UpstreamHttpMethod": [ "Post" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "projectservice",
+          "Port": 80
+        }
+      ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "DownstreamPathTemplate": "/api/createprojectwithtemplate"
     }
   ],
   "GlobalConfiguration": {
