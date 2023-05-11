@@ -1,0 +1,61 @@
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- main
+
+pool: # Agent pool, windows-latest, etc
+  vmImage: 'ubuntu-latest'
+
+variables: 
+  buildConfiguration: 'Release'
+
+stages:
+- stage: Production
+  displayName: Production
+  jobs:
+  - job: BuildTest
+    displayName: Restore and test projects
+    pool:
+      name: Default
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Install .NET Core SDK 6.0'
+      inputs:
+        packageType: 'sdk'
+        version: '6.x'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Build userservice'
+      inputs:
+        command: build
+        arguments: '--configuration $(buildConfiguration)'
+        projects: 'copycloudlsln/userservice/userservice.csproj'
+    
+    - task: DotNetCoreCLI@2
+      displayName: 'Build projectservice'
+      inputs:
+        command: build
+        arguments: '--configuration $(buildConfiguration)'
+        projects: 'copycloudlsln/projectservice/projectservice.csproj'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Build emailconsumer service'
+      inputs:
+        command: build
+        arguments: '--configuration $(buildConfiguration)'
+        projects: 'copycloudlsln/emailappservice/emailappservice.csproj'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Build document service'
+      inputs:
+        command: build
+        arguments: '--configuration $(buildConfiguration)'
+        projects: 'copycloudlsln/documentbgservice/documentbgservice.csproj'
+    
+    - task: DotNetCoreCLI@2
+      displayName: 'Build api gateway'
+      inputs:
+        command: build
+        arguments: '--configuration $(buildConfiguration)'
+        projects: 'copycloudlsln/APIGateway/APIGateway.csproj'
+    
