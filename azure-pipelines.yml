@@ -29,7 +29,7 @@ stages:
       inputs:
         command: build
         arguments: '--configuration $(buildConfiguration)'
-        projects: 'userservice/userservice.csproj'
+        projects: '**/userservice.csproj'
 
     
     - task: DotNetCoreCLI@2
@@ -37,26 +37,26 @@ stages:
       inputs:
         command: build
         arguments: '--configuration $(buildConfiguration)'
-        projects: 'projectservice/projectservice.csproj'
+        projects: '**/projectservice.csproj'
 
     - task: DotNetCoreCLI@2
       displayName: 'Build emailconsumer service'
       inputs:
         command: build
         arguments: '--configuration $(buildConfiguration)'
-        projects: 'emailappservice/emailappservice.csproj'
+        projects: '**/emailappservice.csproj'
 
     - task: DotNetCoreCLI@2
       displayName: 'Build document service'
       inputs:
         command: build
         arguments: '--configuration $(buildConfiguration)'
-        projects: 'documentbgservice/documentbgservice.csproj'
+        projects: '**/documentbgservice.csproj'
     
     - task: DotNetCoreCLI@2
       displayName: 'Build api gateway'
       inputs:
         command: build
         arguments: '--configuration $(buildConfiguration)'
-        projects: 'APIGateway/APIGateway.csproj'
+        projects: '**/APIGateway.csproj'
     
