@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <None Remove="appsettings.Development.json" />
-    <None Remove="appsettings.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,14 +18,10 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Communication.Email" Version="1.0.0-beta.4" />
     <PackageReference Include="Azure.Messaging.EventHubs" Version="5.9.1" />
     <PackageReference Include="Azure.Messaging.EventHubs.Processor" Version="5.9.1" />
     <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.13.1" />
@@ -36,7 +31,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\projectlibrary\projectlibrary.csproj" />
+    <ProjectReference Include="..\EmailServiceMessages\EmailServiceMessages.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
