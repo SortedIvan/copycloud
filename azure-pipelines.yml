@@ -8,7 +8,6 @@ pool:
 
 variables: 
   buildConfiguration: 'Release'
-  solutionDir: 'copycloudsln'
 
 stages:
 - stage: Production
@@ -30,7 +29,6 @@ stages:
       inputs:
         command: build
         arguments: '--configuration $(buildConfiguration)'
-        workingDirectory: '$(solutionDir)'
         projects: 'userservice/userservice.csproj'
 
     
@@ -39,7 +37,6 @@ stages:
       inputs:
         command: build
         arguments: '--configuration $(buildConfiguration)'
-        workingDirectory: '$(solutionDir)'
         projects: 'projectservice/projectservice.csproj'
 
     - task: DotNetCoreCLI@2
@@ -47,7 +44,6 @@ stages:
       inputs:
         command: build
         arguments: '--configuration $(buildConfiguration)'
-        workingDirectory: '$(solutionDir)'
         projects: 'emailappservice/emailappservice.csproj'
 
     - task: DotNetCoreCLI@2
@@ -55,7 +51,6 @@ stages:
       inputs:
         command: build
         arguments: '--configuration $(buildConfiguration)'
-        workingDirectory: '$(solutionDir)'
         projects: 'documentbgservice/documentbgservice.csproj'
     
     - task: DotNetCoreCLI@2
@@ -63,6 +58,5 @@ stages:
       inputs:
         command: build
         arguments: '--configuration $(buildConfiguration)'
-        workingDirectory: '$(solutionDir)'
         projects: 'APIGateway/APIGateway.csproj'
     
