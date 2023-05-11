@@ -3,9 +3,11 @@
 trigger:
 - main
 
+pool:
+  vmImage: ubuntu-latest
+
 variables: 
   buildConfiguration: 'Release'
-  vmImageName: 'ubuntu-latest'
 
 stages:
 - stage: Production
