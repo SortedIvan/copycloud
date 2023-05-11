@@ -8,6 +8,7 @@ pool:
 
 variables: 
   buildConfiguration: 'Release'
+  tag: '$(Build.SourceBranchName)'
 
 stages:
 - stage: Production
@@ -59,4 +60,54 @@ stages:
         command: build
         arguments: '--configuration $(buildConfiguration)'
         projects: '**/APIGateway.csproj'
-    
+  - job: CreateImage  
+    displayName: Build/push docker images
+    dependsOn: BuildTest
+    pool:
+      name: localagent
+    steps:
+    - task: Docker@2
+      displayName: 'Build image and push for userservice:$(tag)'
+      inputs:
+        containerRegistry: 'copyclouddocker'
+        repository: 'copycloudcontainer'
+        command: 'buildAndPush'
+        tags: $(tag)
+        Dockerfile: 'userservice/Dockerfile'
+        buildContext: 'userservice'
+    - task: Docker@2
+      displayName: 'Build image and push for projectservice:$(tag)'
+      inputs:
+        containerRegistry: 'copyclouddocker'
+        repository: 'copycloudcontainer'
+        command: 'buildAndPush'
+        tags: $(tag)
+        Dockerfile: 'projectservice/Dockerfile'
+        buildContext: 'projectservice'
+    - task: Docker@2
+      displayName: 'Build image and push for documentservice:$(tag)'
+      inputs:
+        containerRegistry: 'copyclouddocker'
+        repository: 'copycloudcontainer'
+        command: 'buildAndPush'
+        tags: $(tag)
+        Dockerfile: 'documentbgservice/Dockerfile'
+        buildContext: 'documentbgservice'
+    - task: Docker@2
+      displayName: 'Build image and push for emailservice:$(tag)'
+      inputs:
+        containerRegistry: 'copyclouddocker'
+        repository: 'copycloudcontainer'
+        command: 'buildAndPush'
+        tags: '$(Build.SourceBranchName)'
+        Dockerfile: 'emailappservice/Dockerfile'
+        buildContext: 'emailappservice'
+    - task: Docker@2
+      displayName: 'Build image and push for API gateway:$(tag)'
+      inputs:
+        containerRegistry: 'copyclouddocker'
+        repository: 'copycloudcontainer'
+        command: 'buildAndPush'
+        tags: '$(Build.SourceBranchName)'
+        Dockerfile: 'APIGateway/Dockerfile'
+        buildContext: 'APIGateway'
