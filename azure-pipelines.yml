@@ -3,11 +3,9 @@
 trigger:
 - main
 
-pool: # Agent pool, windows-latest, etc
-  vmImage: 'ubuntu-latest'
-
 variables: 
   buildConfiguration: 'Release'
+  vmImageName: 'ubuntu-latest'
 
 stages:
 - stage: Production
