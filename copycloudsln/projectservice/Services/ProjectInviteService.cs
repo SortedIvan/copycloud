@@ -1,12 +1,22 @@
-﻿using Azure.Messaging.ServiceBus;
-using EmailServiceMessages;
-using Microsoft.IdentityModel.Tokens;
+﻿using Azure.Messaging.EventHubs;
+using Azure.Messaging.EventHubs.Producer;
 using Newtonsoft.Json;
 using projectservice.Data;
 using projectservice.Dto;
 using projectservice.Models;
 using projectservice.Utility;
 using System.Diagnostics;
+
+
+public class EmailMessage
+{
+    public string Type { get; set; } = string.Empty;
+    public string Receiver { get; set; } = string.Empty;
+    public string Sender { get; set; } = string.Empty;
+    public string Token { get; set; } = string.Empty;
+    public string ProjectName { get; set; } = string.Empty;
+    public string ProjectId { get; set; } = string.Empty;
+}
 
 namespace projectservice.Services
 {
@@ -24,14 +34,12 @@ namespace projectservice.Services
 
         private readonly IProjectDbConfig projectDb;
         private readonly IConfiguration config;
-        private readonly ServiceBusSender serviceBusSender;
-        private readonly ServiceBusClient busClient;
+        private readonly EventHubProducerClient producer;
         public ProjectInviteService(IProjectDbConfig _dbConfig, IConfiguration _config)
         {
             projectDb = _dbConfig;
             config = _config;
-            busClient = new ServiceBusClient(config.GetSection("ServiceBusConfig:ConnectionStringEmail").Value);
-            serviceBusSender = busClient.CreateSender("projectemailqueue");
+            producer = new EventHubProducerClient(config.GetSection("EventHubConfig:ConnectionString").Value, config.GetSection("EventHubConfig:Hub").Value);
         }
 
         public async Task<string> CreateProjectInvite(ProjectInvitationDto inviteDto)
@@ -97,8 +105,15 @@ namespace projectservice.Services
             };
 
             string messageBody = JsonConvert.SerializeObject(projectInviteMessage);
-            // SEND MESSAGE
-            await serviceBusSender.SendMessageAsync(new ServiceBusMessage(messageBody)); // Message is sent to queue
+            // <------------------------- Event producing ------------------------------>
+            List<EventData> emailEvent = new List<EventData>
+            {
+                new EventData(messageBody)
+            };
+
+            await producer.SendAsync(emailEvent); // Email is sent as event to hub
+
+            
             
             return true;
         }
@@ -140,8 +155,13 @@ namespace projectservice.Services
             };
 
             string messageBody = JsonConvert.SerializeObject(projectInviteMessage);
-            // SEND MESSAGE
-            await serviceBusSender.SendMessageAsync(new ServiceBusMessage(messageBody)); // Message is sent to queue
+            // <------------------------- Event producing ------------------------------>
+            List<EventData> emailEvent = new List<EventData>
+            {
+                new EventData(messageBody)
+            };
+
+            await producer.SendAsync(emailEvent);
 
             return Tuple.Create(true, tokenContents.Item3);
 

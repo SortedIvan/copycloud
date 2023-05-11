@@ -15,7 +15,8 @@
       "LoadBalancerOptions": {
         "Type": "RoundRobin"
       },
-      "DownstreamPathTemplate": "/api/login"
+      "DownstreamPathTemplate": "/api/login",
+      "DownstreamHttpMethod": "POST"
     },
     {
       "UpstreamPathTemplate": "/api/register",
@@ -35,7 +36,7 @@
     },
     {
       "UpstreamPathTemplate": "/api/getcurrentuser",
-      "UpstreamHttpMethod": [ "Post" ],
+      "UpstreamHttpMethod": [ "Get" ],
 
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -52,7 +53,7 @@
     // <-------------------- PROJECT SERVICE ---------------------------->
     {
       "UpstreamPathTemplate": "/api/createproject",
-      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamHttpMethod": [ "Post" ],
 
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -84,7 +85,7 @@
     },
     {
       "UpstreamPathTemplate": "/api/getprojectbyid",
-      "UpstreamHttpMethod": [ "Post" ],
+      "UpstreamHttpMethod": [ "Get" ],
 
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -161,7 +162,104 @@
         "Type": "LeastConnection"
       },
       "DownstreamPathTemplate": "/api/createprojectwithtemplate"
+    },
+    {
+      "UpstreamPathTemplate": "/api/savedocument",
+      "UpstreamHttpMethod": [ "Post" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "projectservice",
+          "Port": 80
+        }
+      ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "DownstreamPathTemplate": "/api/savedocument"
+    },
+    {
+      "UpstreamPathTemplate": "/api/getdocumentcontent",
+      "UpstreamHttpMethod": [ "Get" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "projectservice",
+          "Port": 80
+        }
+      ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "DownstreamPathTemplate": "/api/getdocumentcontent"
+    },
+    {
+      "UpstreamPathTemplate": "/api/invitetoproject",
+      "UpstreamHttpMethod": [ "Post" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "projectservice",
+          "Port": 80
+        }
+      ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "DownstreamPathTemplate": "/api/invitetoproject"
+    },
+    {
+      "UpstreamPathTemplate": "/api/createprojectinvite",
+      "UpstreamHttpMethod": [ "Post" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "projectservice",
+          "Port": 80
+        }
+      ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "DownstreamPathTemplate": "/api/createprojectinvite"
+    },
+    {
+      "UpstreamPathTemplate": "/api/acceptinvitefromlink",
+      "UpstreamHttpMethod": [ "Get" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "projectservice",
+          "Port": 80
+        }
+      ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "DownstreamPathTemplate": "/api/acceptinvitefromlink"
+    },
+    {
+      "UpstreamPathTemplate": "/api/acceptinvite",
+      "UpstreamHttpMethod": [ "Get" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "projectservice",
+          "Port": 80
+        }
+      ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "DownstreamPathTemplate": "/api/acceptinvite"
     }
+
   ],
   "GlobalConfiguration": {
     "BaseUrl":  "http://localhost:800"

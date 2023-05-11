@@ -30,7 +30,7 @@ namespace projectservice.Controllers
         public async Task<string> CreateProjectInvite(ProjectInvitationDto inviteDto)
         {
             string invite = await this.projectInviteService.CreateProjectInvite(inviteDto);
-            return "http://localhost:5127/api/acceptinvitefromlink?token=" + invite;
+            return "http://localhost:8001/api/acceptinvitefromlink?token=" + invite;
         }
 
         [Authorize(Roles = "User")]
@@ -57,7 +57,7 @@ namespace projectservice.Controllers
         }
 
         [Authorize(Roles = "User")]
-        [HttpGet("/api/acceptinvite/")]
+        [HttpGet("/api/acceptinvite")]
         public async Task<IActionResult> AcceptProjectInvite([FromQuery] string token)
         {
             // TODO: Check if the user is an actual user of the platform
@@ -72,13 +72,13 @@ namespace projectservice.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost("/api/getencodedtoken/")]
+        [HttpPost("/api/getencodedtoken")]
         public async Task<IActionResult> GetToken(string token)
         {
             return Ok(InvitationTokenUtil.Base64Encode(token));
         }
 
-        [HttpPost("/api/testtokendecoding/")]
+        [HttpPost("/api/testtokendecoding")]
         public async Task<IActionResult> DecodeToken(string token)
         {
             return Ok(InvitationTokenUtil.ParseInviteToken(InvitationTokenUtil.Base64Decode(token)));

@@ -1,8 +1,16 @@
 ﻿using Azure.Messaging.ServiceBus;
 using Azure.Storage.Blobs;
 using Newtonsoft.Json;
-using projectlibrary;
 using projectservice.Utility;
+
+
+public class DocumentMessage
+{
+    public string ProjectID { get; set; } = string.Empty;
+    public string Content { get; set; } = string.Empty;
+
+}
+
 
 namespace projectservice.Services
 {

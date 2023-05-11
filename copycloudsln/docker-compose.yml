@@ -9,21 +9,38 @@ services:
       image: ${DOCKER_REGISTRY-}userservice
       build:
         context: .\userservice
-        secrets:
-          - google_creds
+        #secrets:
+        #  - google_creds
       networks:
         - backend
-    contentservice:
-        container_name: content-service
-        image: ${DOCKER_REGISTSTRY-}contentservice
+      environment:
+        - GOOGLE_APPLICATION_CREDENTIALS=firebase-config.json
+    projectservice:
+        container_name: project-service
+        image: ${DOCKER_REGISTRY-}projectservice
         build:
-            context: .\contentservice
-        secrets:
-            - google_creds
+            context: .\projectservice
+            #secrets:
+            #    - google_creds
         networks:
             - backend
-        #environment:
-        #    - GOOGLE_APPLICATION_CREDENTIALS=firebase-config.json
+        environment:
+            - GOOGLE_APPLICATION_CREDENTIALS=firebase-config.json
+    documentbgservice:
+        container_name: documentbg-service
+        image: ${DOCKER_REGISTRY-}documentbgservice
+        build:
+            context: .\documentbgservice
+        networks:
+            - backend
+
+    emailappservice:
+        container_name: emailapp-service
+        image: ${DOCKER_REGISTRY-}emailappservice
+        build:
+            context: .\emailappservice
+        networks:
+            - backend
     apigateway:
         container_name: api-gateway
         image: ${DOCKER_REGISTRY-}apigateway
@@ -34,7 +51,7 @@ services:
             - 8001:80
         networks:
             - backend
-secrets: # Securing the configuration files
-  google_creds:
-    environment: 
-       GOOGLE_APPLICATION_CREDENTIALS=firebase-config.json
+#secrets: # Securing the configuration files
+#  google_creds:
+#    environment: 
+#       GOOGLE_APPLICATION_CREDENTIALS=firebase-config.json
