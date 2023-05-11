@@ -16,7 +16,7 @@ stages:
   - job: BuildTest
     displayName: Restore and test projects
     pool:
-      name: Default
+      name: localagent
     steps:
     - task: UseDotNet@2
       displayName: 'Install .NET Core SDK 6.0'
