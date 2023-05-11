@@ -8,6 +8,7 @@ pool:
 
 variables: 
   buildConfiguration: 'Release'
+  solutionDir: 'copycloudsln'
 
 stages:
 - stage: Production
@@ -29,33 +30,39 @@ stages:
       inputs:
         command: build
         arguments: '--configuration $(buildConfiguration)'
-        projects: 'copycloudlsln/userservice/userservice.csproj'
+        workingDirectory: '$(solutionDir)'
+        projects: 'userservice/userservice.csproj'
+
     
     - task: DotNetCoreCLI@2
       displayName: 'Build projectservice'
       inputs:
         command: build
         arguments: '--configuration $(buildConfiguration)'
-        projects: 'copycloudlsln/projectservice/projectservice.csproj'
+        workingDirectory: '$(solutionDir)'
+        projects: 'projectservice/projectservice.csproj'
 
     - task: DotNetCoreCLI@2
       displayName: 'Build emailconsumer service'
       inputs:
         command: build
         arguments: '--configuration $(buildConfiguration)'
-        projects: 'copycloudlsln/emailappservice/emailappservice.csproj'
+        workingDirectory: '$(solutionDir)'
+        projects: 'emailappservice/emailappservice.csproj'
 
     - task: DotNetCoreCLI@2
       displayName: 'Build document service'
       inputs:
         command: build
         arguments: '--configuration $(buildConfiguration)'
-        projects: 'copycloudlsln/documentbgservice/documentbgservice.csproj'
+        workingDirectory: '$(solutionDir)'
+        projects: 'documentbgservice/documentbgservice.csproj'
     
     - task: DotNetCoreCLI@2
       displayName: 'Build api gateway'
       inputs:
         command: build
         arguments: '--configuration $(buildConfiguration)'
-        projects: 'copycloudlsln/APIGateway/APIGateway.csproj'
+        workingDirectory: '$(solutionDir)'
+        projects: 'APIGateway/APIGateway.csproj'
     
