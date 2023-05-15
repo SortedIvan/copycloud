@@ -8,7 +8,6 @@ pool:
 
 variables: 
   buildConfiguration: 'Release'
-  tag: '$(Build.SourceBranchName)'
 
 stages:
 - stage: Production
@@ -72,7 +71,6 @@ stages:
         containerRegistry: 'copyclouddocker'
         repository: 'userservice'
         command: 'buildAndPush'
-        tags: $(tag)
         Dockerfile: 'userservice/Dockerfile'
         buildContext: 'userservice'
     - task: Docker@2
@@ -81,7 +79,6 @@ stages:
         containerRegistry: 'copyclouddocker'
         repository: 'projectservice'
         command: 'buildAndPush'
-        tags: $(tag)
         Dockerfile: 'projectservice/Dockerfile'
         buildContext: 'projectservice'
     - task: Docker@2
@@ -90,7 +87,6 @@ stages:
         containerRegistry: 'copyclouddocker'
         repository: 'documentbgservice'
         command: 'buildAndPush'
-        tags: $(tag)
         Dockerfile: 'documentbgservice/Dockerfile'
         buildContext: 'documentbgservice'
     - task: Docker@2
@@ -99,7 +95,6 @@ stages:
         containerRegistry: 'copyclouddocker'
         repository: 'emailappservice'
         command: 'buildAndPush'
-        tags: '$(Build.SourceBranchName)'
         Dockerfile: 'emailappservice/Dockerfile'
         buildContext: 'emailappservice'
     - task: Docker@2
@@ -108,6 +103,5 @@ stages:
         containerRegistry: 'copyclouddocker'
         repository: 'apigateway'
         command: 'buildAndPush'
-        tags: '$(Build.SourceBranchName)'
         Dockerfile: 'APIGateway/Dockerfile'
         buildContext: 'APIGateway'
