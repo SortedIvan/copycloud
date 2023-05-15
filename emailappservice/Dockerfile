@@ -9,7 +9,6 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["emailappservice/emailappservice.csproj", "emailappservice/"]
-COPY ["EmailServiceMessages/EmailServiceMessages.csproj", "EmailServiceMessages/"]
 RUN dotnet restore "emailappservice/emailappservice.csproj"
 COPY . .
 WORKDIR "/src/emailappservice"

@@ -9,7 +9,6 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["documentfileservice/documentbgservice.csproj", "documentfileservice/"]
-COPY ["projectlibrary/projectlibrary.csproj", "projectlibrary/"]
 RUN dotnet restore "documentfileservice/documentbgservice.csproj"
 COPY . .
 WORKDIR "/src/documentfileservice"

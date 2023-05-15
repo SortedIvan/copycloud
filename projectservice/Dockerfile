@@ -10,8 +10,6 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["projectservice/projectservice.csproj", "projectservice/"]
-COPY ["EmailServiceMessages/EmailServiceMessages.csproj", "EmailServiceMessages/"]
-COPY ["projectlibrary/projectlibrary.csproj", "projectlibrary/"]
 RUN dotnet restore "projectservice/projectservice.csproj"
 COPY . .
 WORKDIR "/src/projectservice"
