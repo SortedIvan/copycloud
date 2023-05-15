@@ -7,15 +7,15 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY *.csproj .
-RUN dotnet restore "APIgateway.csproj"
+RUN dotnet restore "APIGateway.csproj"
 COPY . .
-RUN dotnet publish "APIgateway.csproj" -c Release -o /publish
+RUN dotnet publish "APIGateway.csproj" -c Release -o /publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 as final
 WORKDIR /app
 COPY --from=build /publish .
 
-ENTRYPOINT ["dotnet", "APIgateway.dll"]
+ENTRYPOINT ["dotnet", "APIGateway.dll"]
 
 
 
