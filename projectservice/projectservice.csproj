@@ -25,7 +25,6 @@
 	
   <ItemGroup>
     <ProjectReference Include="..\EmailServiceMessages\EmailServiceMessages.csproj" />
-    <ProjectReference Include="..\projectlibrary\projectlibrary.csproj" />
   </ItemGroup>
 
 </Project>

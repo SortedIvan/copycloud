@@ -7,17 +7,6 @@ using projectservice.Models;
 using projectservice.Utility;
 using System.Diagnostics;
 
-
-public class EmailMessage
-{
-    public string Type { get; set; } = string.Empty;
-    public string Receiver { get; set; } = string.Empty;
-    public string Sender { get; set; } = string.Empty;
-    public string Token { get; set; } = string.Empty;
-    public string ProjectName { get; set; } = string.Empty;
-    public string ProjectId { get; set; } = string.Empty;
-}
-
 namespace projectservice.Services
 {
     public class ProjectInviteService : IProjectInviteService

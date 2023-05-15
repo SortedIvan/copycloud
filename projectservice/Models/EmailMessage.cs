@@ -1,4 +1,4 @@
-﻿namespace EmailServiceMessages
+﻿namespace projectservice.Models
 {
     public class EmailMessage
     {
@@ -9,4 +9,5 @@
         public string ProjectName { get; set; } = string.Empty;
         public string ProjectId { get; set; } = string.Empty;
     }
+
 }
