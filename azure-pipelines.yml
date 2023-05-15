@@ -59,4 +59,49 @@ stages:
         command: build
         arguments: '--configuration $(buildConfiguration)'
         projects: '**/APIGateway.csproj'
-    
+  - job: CreateImage  
+    displayName: Build/push docker images
+    dependsOn: BuildTest
+    pool:
+      name: localagent
+    steps:
+    - task: Docker@2
+      displayName: 'Build image and push for userservice:$(tag)'
+      inputs:
+        containerRegistry: 'copyclouddocker'
+        repository: 'ivanovcharov/userservice'
+        command: 'buildAndPush'
+        Dockerfile: 'userservice/Dockerfile'
+        buildContext: 'userservice'
+    - task: Docker@2
+      displayName: 'Build image and push for projectservice:$(tag)'
+      inputs:
+        containerRegistry: 'copyclouddocker'
+        repository: 'ivanovcharov/projectservice'
+        command: 'buildAndPush'
+        Dockerfile: 'projectservice/Dockerfile'
+        buildContext: 'projectservice'
+    - task: Docker@2
+      displayName: 'Build image and push for documentservice:$(tag)'
+      inputs:
+        containerRegistry: 'copyclouddocker'
+        repository: 'ivanovcharov/documentbgservice'
+        command: 'buildAndPush'
+        Dockerfile: 'documentbgservice/Dockerfile'
+        buildContext: 'documentbgservice'
+    - task: Docker@2
+      displayName: 'Build image and push for emailservice:$(tag)'
+      inputs:
+        containerRegistry: 'copyclouddocker'
+        repository: 'ivanovcharov/emailappservice'
+        command: 'buildAndPush'
+        Dockerfile: 'emailappservice/Dockerfile'
+        buildContext: 'emailappservice'
+    - task: Docker@2
+      displayName: 'Build image and push for API gateway:$(tag)'
+      inputs:
+        containerRegistry: 'copyclouddocker'
+        repository: 'ivanovcharov/apigateway'
+        command: 'buildAndPush'
+        Dockerfile: 'APIGateway/Dockerfile'
+        buildContext: 'APIGateway'
