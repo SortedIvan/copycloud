@@ -69,7 +69,7 @@ stages:
       displayName: 'Build image and push for userservice:$(tag)'
       inputs:
         containerRegistry: 'copyclouddocker'
-        repository: 'userservice'
+        repository: 'ivanovcharov/userservice'
         command: 'buildAndPush'
         Dockerfile: 'userservice/Dockerfile'
         buildContext: 'userservice'
@@ -77,7 +77,7 @@ stages:
       displayName: 'Build image and push for projectservice:$(tag)'
       inputs:
         containerRegistry: 'copyclouddocker'
-        repository: 'projectservice'
+        repository: 'ivanovcharov/projectservice'
         command: 'buildAndPush'
         Dockerfile: 'projectservice/Dockerfile'
         buildContext: 'projectservice'
@@ -85,7 +85,7 @@ stages:
       displayName: 'Build image and push for documentservice:$(tag)'
       inputs:
         containerRegistry: 'copyclouddocker'
-        repository: 'documentbgservice'
+        repository: 'ivanovcharov/documentbgservice'
         command: 'buildAndPush'
         Dockerfile: 'documentbgservice/Dockerfile'
         buildContext: 'documentbgservice'
@@ -93,7 +93,7 @@ stages:
       displayName: 'Build image and push for emailservice:$(tag)'
       inputs:
         containerRegistry: 'copyclouddocker'
-        repository: 'emailappservice'
+        repository: 'ivanovcharov/emailappservice'
         command: 'buildAndPush'
         Dockerfile: 'emailappservice/Dockerfile'
         buildContext: 'emailappservice'
@@ -101,7 +101,7 @@ stages:
       displayName: 'Build image and push for API gateway:$(tag)'
       inputs:
         containerRegistry: 'copyclouddocker'
-        repository: 'apigateway'
+        repository: 'ivanovcharov/apigateway'
         command: 'buildAndPush'
         Dockerfile: 'APIGateway/Dockerfile'
         buildContext: 'APIGateway'
