@@ -2,19 +2,20 @@
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
+EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["APIGateway/APIGateway.csproj", "APIGateway/"]
-RUN dotnet restore "APIGateway/APIGateway.csproj"
+COPY *.csproj .
+RUN dotnet restore "APIgateway.csproj"
 COPY . .
-WORKDIR "/src/APIGateway"
-RUN dotnet build "APIGateway.csproj" -c Release -o /app/build
+RUN dotnet publish "APIgateway.csproj" -c Release -o /publish
 
-FROM build AS publish
-RUN dotnet publish "APIGateway.csproj" -c Release -o /app/publish /p:UseAppHost=false
-
-FROM base AS final
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 as final
 WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "APIGateway.dll"]
+COPY --from=build /publish .
+
+ENTRYPOINT ["dotnet", "APIgateway.dll"]
+
+
+
