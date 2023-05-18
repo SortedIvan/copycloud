@@ -6,5 +6,6 @@ namespace projectservice.Services
     {
         Task<Tuple<bool, string>> CreateProject(ProjectDto dto);
         Task<Tuple<bool, string>> DeleteProject(string projectId, string userRequesting);
+        Task<bool> DeleteUserFromProject(string projectId, string userEmail);
     }
 }

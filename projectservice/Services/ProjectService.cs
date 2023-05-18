@@ -60,5 +60,23 @@ namespace projectservice.Services
             }
             return Tuple.Create(false, "Project does not exist");
         }
+
+        public async Task<bool> DeleteUserFromProject(string projectId, string userEmail)
+        {
+            try
+            {
+                Tuple<bool, string> result = await projectDb.DeleteUserFromProject(projectId, userEmail);
+
+                if (result.Item1)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+        }
     }
 }

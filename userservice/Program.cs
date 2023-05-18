@@ -19,6 +19,7 @@ builder.Services.AddSingleton<IMongoClient>(s =>
 builder.Services.AddScoped<IUserDbConfig, UserDbConfig>();
 builder.Services.AddScoped<IRegisterService, RegisterService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddCors(options =>
 {

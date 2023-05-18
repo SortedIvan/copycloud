@@ -27,6 +27,7 @@ builder.Services.AddScoped<IProjectDbConfig, ProjectDbConfig>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectInviteService, ProjectInviteService>();
 
+builder.Services.AddHostedService<ProjectEventsService>();
 
 // Add services to the container.
 builder.Services.AddSingleton<IMongoClient>(s =>

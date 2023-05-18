@@ -330,5 +330,30 @@ namespace projectservice.Data
                 return false;
             }
         }
+
+        public async Task<Tuple<bool, string>> DeleteUserFromProject(string projectId, string userEmail)
+        {
+            try
+            {
+                var filter = Builders<ProjectModel>.Filter.Eq(s => s.Id, projectId);
+                ProjectModel project = await this.projects.Find(filter).FirstOrDefaultAsync();
+
+                for (int i = 0; i < project.ProjectUsers.Count; i++)
+                {
+                    if (project.ProjectUsers[i] == userEmail)
+                    {
+                        project.ProjectUsers.RemoveAt(i);
+                        return Tuple.Create(true, "User deleted succesfully");
+                    }
+                }
+
+                return Tuple.Create(false, "No such user exists");
+
+            }
+            catch (Exception ex)
+            {
+                return Tuple.Create(false, $"There was an exception: {ex.Message}");
+            }
+        }
     }
 }

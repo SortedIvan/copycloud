@@ -1,5 +1,6 @@
 ﻿using Azure.Messaging.EventHubs;
 using Azure.Messaging.EventHubs.Producer;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using projectservice.Data;
 using projectservice.Dto;
@@ -155,5 +156,22 @@ namespace projectservice.Services
             return Tuple.Create(true, tokenContents.Item3);
 
         }
+
+        //public async Task<bool> SendEmailToDeletedUser(string userEmail)
+        //{
+        //    EmailMessage projectInviteMessage = new EmailMessage
+        //    {
+        //        Type = "deletedUser",
+        //        Token = $"Your data (user: {userEmail}) has been deleted succesfully. Thank you for using our application"
+        //    };
+
+        //    string messageBody = JsonConvert.SerializeObject(projectInviteMessage);
+        //    // <------------------------- Event producing ------------------------------>
+        //    List<EventData> emailEvent = new List<EventData>
+        //    {
+        //        new EventData(messageBody)
+        //    };
+
+        //}
     }
 }

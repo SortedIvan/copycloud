@@ -70,5 +70,19 @@ namespace userservice.Database
 
         }
 
+        public async Task<bool> DeleteUser(string userEmail)
+        {
+            try
+            {
+                var filter = Builders<UserModel>.Filter.Eq(s => s.UserEmail, userEmail);
+                await this.users.DeleteOneAsync(filter);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
     }
 }

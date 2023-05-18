@@ -1,4 +1,5 @@
-﻿using DnsClient;
+﻿using Azure.Messaging.EventHubs.Producer;
+using DnsClient;
 using Firebase.Auth;
 using Microsoft.AspNetCore.Identity;
 using Refit;
@@ -20,6 +21,7 @@ namespace userservice.Services
             this.config = _config;
             firebaseProvider = new FirebaseAuthProvider(new FirebaseConfig(_config.GetSection("FirebaseSettings:firebase_api_key").Value));
             this.userDbConfig = _userDbConfig;
+           
         }
 
 

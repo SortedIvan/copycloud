@@ -10,5 +10,7 @@ namespace userservice.Database
         Task<UserModel> GetUserByEmail(string userEmail);
         Task<Tuple<bool, string>> SaveUserDb(UserDtoRegister userDto, string firebaseId);
         Task<bool> CheckUserExists(string userEmail);
+
+        Task<bool> DeleteUser(string userEmail);
     }
 }

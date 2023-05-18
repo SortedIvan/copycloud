@@ -26,5 +26,6 @@ namespace projectservice.Data
         Task<ProjectInvitationLink> GetProjectInvitationLink(string projectId, string secret);
         Task<bool> CheckProjectInviteLinkExists(string projectId, string secret);
         Task<bool> DeleteProjectByProjectId(string projectId);
+        Task<Tuple<bool, string>> DeleteUserFromProject(string projectId, string userEmail);
     }
 }
