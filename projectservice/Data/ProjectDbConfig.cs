@@ -343,6 +343,7 @@ namespace projectservice.Data
                     if (project.ProjectUsers[i] == userEmail)
                     {
                         project.ProjectUsers.RemoveAt(i);
+                        await projects.ReplaceOneAsync(filter, project);
                         return Tuple.Create(true, "User deleted succesfully");
                     }
                 }

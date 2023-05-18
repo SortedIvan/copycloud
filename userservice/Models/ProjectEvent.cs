@@ -1,4 +1,4 @@
-﻿namespace projectservice.Models
+﻿namespace userservice.Models
 {
     public class ProjectEvent
     {
@@ -11,4 +11,5 @@
     {
         public string UserEmail { get; set; } = string.Empty;
     }
+    
 }
