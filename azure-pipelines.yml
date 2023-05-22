@@ -12,6 +12,8 @@ variables:
 stages:
 - stage: Production
   displayName: Production
+  pool:
+    name: agentlocal
   jobs:
   - job: SonarcloudPrepare
     steps:
@@ -25,7 +27,7 @@ stages:
   - job: BuildTest
     displayName: Restore and test projects
     pool:
-      name: localagent
+      name: agentlocal
     steps:
     - task: UseDotNet@2
       displayName: 'Install .NET Core SDK 6.0'
@@ -70,13 +72,15 @@ stages:
         projects: '**/APIGateway.csproj'
         
   - job: CodeAnalysis
+    pool:
+      name: agentlocal
     steps:
     - task: SonarCloudAnalyze@1
   - job: CreateImage  
     displayName: Build/push docker images
     dependsOn: BuildTest
     pool:
-      name: localagent
+      name: agentlocal
     steps:
     - task: Docker@2
       displayName: 'Build image and push for userservice:$(tag)'
