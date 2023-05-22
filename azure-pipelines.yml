@@ -13,6 +13,15 @@ stages:
 - stage: Production
   displayName: Production
   jobs:
+  - job: SonarcloudPrepare
+    steps:
+    - task: SonarCloudPrepare@1
+      inputs:
+        SonarCloud: 'sonarcloudconnection'
+        organization: 'copycloud'
+        scannerMode: 'MSBuild'
+        projectKey: '450754_copycloudrepo'
+        projectName: 'copycloudrepo'
   - job: BuildTest
     displayName: Restore and test projects
     pool:
@@ -59,6 +68,10 @@ stages:
         command: build
         arguments: '--configuration $(buildConfiguration)'
         projects: '**/APIGateway.csproj'
+        
+  - job: CodeAnalysis
+    steps:
+    - task: SonarCloudAnalyze@1
   - job: CreateImage  
     displayName: Build/push docker images
     dependsOn: BuildTest
