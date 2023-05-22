@@ -1,4 +1,3 @@
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
 - main
@@ -26,6 +25,7 @@ stages:
         projectName: 'copycloudrepo'
   - job: BuildTest
     displayName: Restore and test projects
+    dependsOn: SonarcloudPrepare
     pool:
       name: agentlocal
     steps:
@@ -72,6 +72,8 @@ stages:
         projects: '**/APIGateway.csproj'
         
   - job: CodeAnalysis
+    displayName: 'Run code analysis'
+    dependsOn: BuildTest
     pool:
       name: agentlocal
     steps:
