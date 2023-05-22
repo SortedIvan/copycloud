@@ -14,36 +14,30 @@ stages:
   pool:
     name: agentlocal
   jobs:
-  - job: SonarcloudPrepare
-    displayName: 'Prepare Analysis Configuration'
+  - job: BuildTestAnalyse
+    displayName: Restore and test projects
+    pool:
+      name: agentlocal
     steps:
     - task: SonarCloudPrepare@1
+      displayName: "Prepare sonarcloud"
       inputs:
         SonarCloud: 'sonarcloudconnection'
         organization: 'copycloud'
         scannerMode: 'MSBuild'
         projectKey: '450754_copycloudrepo'
         projectName: 'copycloudrepo'
-  - job: BuildTest
-    displayName: Restore and test projects
-    dependsOn: SonarcloudPrepare
-    pool:
-      name: agentlocal
-    steps:
     - task: UseDotNet@2
       displayName: 'Install .NET Core SDK 6.0'
       inputs:
         packageType: 'sdk'
         version: '6.x'
-
     - task: DotNetCoreCLI@2
       displayName: 'Build userservice'
       inputs:
         command: build
         arguments: '--configuration $(buildConfiguration)'
         projects: '**/userservice.csproj'
-
-    
     - task: DotNetCoreCLI@2
       displayName: 'Build projectservice'
       inputs:
@@ -71,17 +65,11 @@ stages:
         command: build
         arguments: '--configuration $(buildConfiguration)'
         projects: '**/APIGateway.csproj'
-        
-  - job: CodeAnalysis
-    displayName: 'Run code analysis'
-    dependsOn: BuildTest
-    pool:
-      name: agentlocal
-    steps:
     - task: SonarCloudAnalyze@1
+      displayName: "Analyse code"
   - job: CreateImage  
     displayName: Build/push docker images
-    dependsOn: BuildTest
+    dependsOn: BuildTestAnalyse
     pool:
       name: agentlocal
     steps:
