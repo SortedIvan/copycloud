@@ -27,5 +27,7 @@ namespace projectservice.Data
         Task<bool> CheckProjectInviteLinkExists(string projectId, string secret);
         Task<bool> DeleteProjectByProjectId(string projectId);
         Task<Tuple<bool, string>> DeleteUserFromProject(string projectId, string userEmail);
+
+        Task<bool> ChangeLastUpdated(string projectId);
     }
 }
