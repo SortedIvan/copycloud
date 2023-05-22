@@ -15,6 +15,7 @@ stages:
     name: agentlocal
   jobs:
   - job: SonarcloudPrepare
+    displayName: 'Prepare Analysis Configuration'
     steps:
     - task: SonarCloudPrepare@1
       inputs:
