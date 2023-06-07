@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using projectservice.Data;
 using projectservice.Dto;
+using projectservice.Models;
 using projectservice.Services;
 using projectservice.Utility;
+using System.Diagnostics;
 using System.Security.Claims;
 
 namespace projectservice.Controllers
@@ -57,10 +59,11 @@ namespace projectservice.Controllers
             }
 
             Tuple<bool, string> result = await this.documentService.SaveDocument(save.Content, save.ProjectId);
-
+            
             if (result.Item1)
             {
-                return Ok();
+                bool resultUpdate = await projectDb.ChangeLastUpdated(save.ProjectId);
+                return Ok(resultUpdate);
             }
 
             return BadRequest(result.Item2);

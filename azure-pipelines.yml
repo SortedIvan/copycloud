@@ -1,4 +1,3 @@
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
 - main
@@ -12,26 +11,33 @@ variables:
 stages:
 - stage: Production
   displayName: Production
+  pool:
+    name: agentlocal
   jobs:
-  - job: BuildTest
+  - job: BuildTestAnalyse
     displayName: Restore and test projects
     pool:
-      name: localagent
+      name: agentlocal
     steps:
+    - task: SonarCloudPrepare@1
+      displayName: "Prepare sonarcloud"
+      inputs:
+        SonarCloud: 'sonarcloudconnection'
+        organization: 'copycloud'
+        scannerMode: 'MSBuild'
+        projectKey: '450754_copycloudrepo'
+        projectName: 'copycloudrepo'
     - task: UseDotNet@2
       displayName: 'Install .NET Core SDK 6.0'
       inputs:
         packageType: 'sdk'
         version: '6.x'
-
     - task: DotNetCoreCLI@2
       displayName: 'Build userservice'
       inputs:
         command: build
         arguments: '--configuration $(buildConfiguration)'
         projects: '**/userservice.csproj'
-
-    
     - task: DotNetCoreCLI@2
       displayName: 'Build projectservice'
       inputs:
@@ -59,11 +65,13 @@ stages:
         command: build
         arguments: '--configuration $(buildConfiguration)'
         projects: '**/APIGateway.csproj'
+    - task: SonarCloudAnalyze@1
+      displayName: "Analyse code"
   - job: CreateImage  
     displayName: Build/push docker images
-    dependsOn: BuildTest
+    dependsOn: BuildTestAnalyse
     pool:
-      name: localagent
+      name: agentlocal
     steps:
     - task: Docker@2
       displayName: 'Build image and push for userservice:$(tag)'

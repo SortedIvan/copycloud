@@ -1,9 +1,11 @@
 ﻿
 
+using System.Diagnostics;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using userservice.Services;
+using userservice.Utils;
 
 namespace userservice.Controllers
 {
@@ -11,9 +13,11 @@ namespace userservice.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService userService;
-        public UserController(IUserService _userService)
+        private ILogger<UserController> logger;
+        public UserController(IUserService _userService, ILogger<UserController> logger)
         {
             this.userService = _userService;
+            this.logger = logger;
         }
 
         //[Authorize(Roles ="User")]
@@ -36,7 +40,6 @@ namespace userservice.Controllers
         public async Task<IActionResult> DeleteSelf()
         {
             var req = (User.Identity as ClaimsIdentity).Claims.Where(c => c.Type == "email").FirstOrDefault();
-
             string userEmail = req.Value;
 
             if (userEmail == "")
@@ -44,7 +47,11 @@ namespace userservice.Controllers
                 return BadRequest("User not logged in or does not exist");
             }
 
-            Tuple<bool, string> result = await userService.DeleteUser(userEmail);
+            var cookie = Request.Headers.Cookie;
+            string token = cookie.ElementAt(0);
+            token = TokenParser.ParseToken(token);
+
+            Tuple<bool, string> result = await userService.DeleteUser(userEmail, token);
 
             if (result.Item1)
             {

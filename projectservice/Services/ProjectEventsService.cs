@@ -35,7 +35,7 @@ namespace projectservice.Services
             container = _config.GetSection("EventHubStorage:ContainerProjectEvents").Value;
             consumerGroup = _config.GetSection("EventHubConfig:ConsumerGroupProjectEvents").Value;
             eventHubConnectionString = _config.GetSection("EventHubConfig:ConnectionString").Value;
-            eventHubName = _config.GetSection("EventHubConfig:Hub").Value;
+            eventHubName = _config.GetSection("EventHubConfig:HubProject").Value;
 
             _projectService = factory.CreateScope().ServiceProvider.GetRequiredService<IProjectService>();
 
@@ -70,7 +70,7 @@ namespace projectservice.Services
             switch (message.EventType)
             {
                 case "deleteuser":
-                    await _projectService.DeleteUserFromProject(message.DeleteUserData.ProjectId, message.DeleteUserData.UserEmail);
+                    await _projectService.DeleteUserFromProject(message.DeleteUserData.UserEmail);
                     break;
                     //case "inviteAccept":
                     //    await projectEmailService.SendPersonJoinedEmail(message.)

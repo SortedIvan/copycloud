@@ -218,7 +218,8 @@ namespace projectservice.Data
                     ProjectDescription = projectDto.ProjectDescription,
                     ProjectName = projectDto.ProjectName,
                     ProjectUsers = new List<string> { projectDto.ProjectCreator },// Add the creator to project users
-
+                    CreationDate = DateTime.Now,
+                    LastUpdated = DateTime.Now
                 };
                 await this.projects.InsertOneAsync(projectModel);
 
@@ -343,6 +344,7 @@ namespace projectservice.Data
                     if (project.ProjectUsers[i] == userEmail)
                     {
                         project.ProjectUsers.RemoveAt(i);
+                        await projects.ReplaceOneAsync(filter, project);
                         return Tuple.Create(true, "User deleted succesfully");
                     }
                 }
@@ -353,6 +355,22 @@ namespace projectservice.Data
             catch (Exception ex)
             {
                 return Tuple.Create(false, $"There was an exception: {ex.Message}");
+            }
+        }
+
+        public async Task<bool> ChangeLastUpdated(string projectId)
+        {
+            try
+            {
+                var filter = Builders<ProjectModel>.Filter.Eq(s => s.Id, projectId);
+                ProjectModel project = await this.projects.Find(filter).FirstOrDefaultAsync();
+                project.LastUpdated = DateTime.Now;
+                await projects.ReplaceOneAsync(filter, project);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
         }
     }

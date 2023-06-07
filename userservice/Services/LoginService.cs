@@ -18,6 +18,7 @@ namespace userservice.Services
 
         public async Task<FirebaseAuthLink> Login(UserDtoLogin loginDto)
         {
+
             // TODO: Exception handling
             FirebaseAuthLink firebaseAuthLink = await firebaseProvider.SignInWithEmailAndPasswordAsync(loginDto.Email, loginDto.Password);
             return firebaseAuthLink;

@@ -15,5 +15,13 @@ namespace projectservice.Models
         public string ProjectCreator { get; set; } = string.Empty; // The email of the user who created the project
         [BsonElement("projectusers")]
         public List<string> ProjectUsers { get; set; } = new List<string>(); // The emails of joined users
+
+        [BsonElement("projectcreationdate")]
+        public DateTime CreationDate { get; set; }
+
+        [BsonElement("projectlastupdated")]
+        public DateTime LastUpdated { get; set; }
+
+
     }
 }
