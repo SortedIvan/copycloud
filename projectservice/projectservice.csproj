@@ -7,6 +7,10 @@
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
   </PropertyGroup>
 
+	<ItemGroup>
+		<InternalsVisibleTo Include="$(AssemblyName).integrationtest"/>
+	</ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Azure.Messaging.EventHubs" Version="5.9.1" />
     <PackageReference Include="Azure.Messaging.EventHubs.Processor" Version="5.9.1" />

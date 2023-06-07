@@ -31,7 +31,7 @@ builder.Services.AddHostedService<ProjectEventsService>();
 
 // Add services to the container.
 builder.Services.AddSingleton<IMongoClient>(s =>
-        new MongoClient(builder.Configuration.GetValue<string>("ProjectDbSettings:ConnectionString")));
+        new MongoClient(builder.Configuration.GetSection("ProjectDbSettings:ConnectionString").Value));
 
 
 builder.Services.AddCors(options =>
