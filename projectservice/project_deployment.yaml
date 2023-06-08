@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: projectservice
+spec:
+  selector:
+    matchLabels:
+      app: projectservice
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: projectservice
+    spec:
+      containers:
+        - name: projectservice
+          image: ivanovcharov/projectservice:58
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8081
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secret/firebase-config.json
+            - name: ProjectDbSettings__ProjectDbCollection
+              value: "Projects"
+            - name: ProjectDbSettings__ProjectInviteDbCollection
+              value: "ProjectInvites"
+            - name: ProjectDbSettings__ProjectContentDbCollection
+              value: "ProjectContents"
+            - name: ProjectDbSettings__ProjectInviteLinkDbCollection
+              value: "ProjectInviteLinks"
+            - name: ProjectDbSettings__DatabaseName
+              value: "ProjectDb"
+            - name: ProjectDbSettings__ConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: project-db-connection-string
+                  key: connection-string
+            - name: ServiceBusConfig__ConnectionStringEmail
+              valueFrom:
+                secretKeyRef:
+                  name: service-bus-connection-string-email
+                  key: connection-string
+            - name: ServiceBusConfig__ConnectionStringDocument
+              valueFrom:
+                secretKeyRef:
+                  name: service-bus-connection-string-document
+                  key: connection-string
+            - name: BlobStorage__Container
+              value: "documents"
+            - name: BlobStorage__ConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: blob-storage-connection-string
+                  key: connection-string
+            - name: EventHubConfig__ConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: project-event-hub-connection-string
+                  key: connection-string
+            - name: EventHubConfig__Hub
+              value: "copycloudprodhub"
+            - name: EventHubConfig__ConsumerGroup
+              value: "mailgroup"
+            - name: EventHubConfig__ConsumerGroupProjectEvents
+              value: projecteventsgroup
+            - name: EventHubStorage__ConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: project-event-hub-storage-connection-string
+                  key: connection-string
+            - name: EventHubStorage__ContainerProjectEvents
+              value: "projectevents"
+          volumeMounts:
+            - name: gcp-credentials-volume
+              mountPath: /var/secret
+              readOnly: true
+            - name: secrets
+              mountPath: /app/secrets
+              readOnly: true
+      volumes:
+        - name: secrets
+          secret:
+            secretName: projectsettings
+        - name: gcp-credentials-volume
+          secret:
+            secretName: gcp-credentials
+      restartPolicy: Always
