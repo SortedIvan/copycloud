@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: projectservice
-          image: ivanovcharov/projectservice:58
+          image: ivanovcharov/projectservice:59
           imagePullPolicy: Always
           ports:
             - containerPort: 8081
@@ -57,7 +57,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: project-event-hub-connection-string
-                  key: connection-string
+                  key: connection-stsring
             - name: EventHubConfig__Hub
               value: "copycloudprodhub"
             - name: EventHubConfig__ConsumerGroup
@@ -68,7 +68,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: project-event-hub-storage-connection-string
-                  key: connection-string
+                  key: connection-stsring
             - name: EventHubStorage__ContainerProjectEvents
               value: "projectevents"
           volumeMounts:

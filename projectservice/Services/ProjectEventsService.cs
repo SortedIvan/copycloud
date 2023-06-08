@@ -27,22 +27,32 @@ namespace projectservice.Services
 
         public ProjectEventsService(ILogger<ProjectEventsService> logger, IServiceScopeFactory factory, IConfiguration config) 
         {
+            try
+            {
+                _config = config;
+                _logger = logger;
 
-            _config = config;
-            _logger = logger;
+                blobConnString = _config.GetSection("EventHubStorage:ConnectionString").Value;
+                container = _config.GetSection("EventHubStorage:ContainerProjectEvents").Value;
+                consumerGroup = _config.GetSection("EventHubConfig:ConsumerGroupProjectEvents").Value;
+                eventHubConnectionString = _config.GetSection("EventHubConfig:ConnectionString").Value;
+                eventHubName = _config.GetSection("EventHubConfig:HubProject").Value;
 
-            blobConnString = _config.GetSection("EventHubStorage:ConnectionString").Value;
-            container = _config.GetSection("EventHubStorage:ContainerProjectEvents").Value;
-            consumerGroup = _config.GetSection("EventHubConfig:ConsumerGroupProjectEvents").Value;
-            eventHubConnectionString = _config.GetSection("EventHubConfig:ConnectionString").Value;
-            eventHubName = _config.GetSection("EventHubConfig:HubProject").Value;
+                _projectService = factory.CreateScope().ServiceProvider.GetRequiredService<IProjectService>();
 
-            _projectService = factory.CreateScope().ServiceProvider.GetRequiredService<IProjectService>();
+                blobContainerClient = new BlobContainerClient(blobConnString, container);
+                processor = new EventProcessorClient(blobContainerClient, consumerGroup, eventHubConnectionString, eventHubName);
+                processor.ProcessEventAsync += Processor_ProcessEventAsync;
+                processor.ProcessErrorAsync += Processor_ProcessErrorAsync;
+            }
+            catch {
+                Console.WriteLine(blobConnString);
+                Console.WriteLine(container);
+                Console.WriteLine(consumerGroup);
+                Console.WriteLine(eventHubConnectionString);
+                Console.WriteLine(eventHubName);
+            }
 
-            blobContainerClient = new BlobContainerClient(blobConnString, container);
-            processor = new EventProcessorClient(blobContainerClient, consumerGroup, eventHubConnectionString, eventHubName);
-            processor.ProcessEventAsync += Processor_ProcessEventAsync;
-            processor.ProcessErrorAsync += Processor_ProcessErrorAsync;
         }
 
 
