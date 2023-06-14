@@ -46,7 +46,7 @@ namespace userservice.Controllers
                 {
                     Expires = DateTime.Now.AddMinutes(30),
                     HttpOnly = true,
-                    Secure = true,
+                    Secure = false,
                     IsEssential = true,
                     SameSite = SameSiteMode.None
                 });
@@ -57,7 +57,7 @@ namespace userservice.Controllers
                 {
                     Expires = DateTime.Now.AddMinutes(120),
                     HttpOnly = true,
-                    Secure = true,
+                    Secure = false,
                     IsEssential = true,
                     SameSite = SameSiteMode.None,
 

@@ -26,7 +26,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
             policy =>
             {
-                policy.WithOrigins("http://localhost:8080").AllowCredentials().AllowAnyHeader().AllowAnyMethod();
+                policy.WithOrigins("https://main--deft-stroopwafel-dec647.netlify.app").AllowCredentials().AllowAnyHeader().AllowAnyMethod();
             });
 });
 
