@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Text;
 
-JObject config = JObject.Parse(File.ReadAllText(@"appsettings.json"));
+JObject config = JObject.Parse(File.ReadAllText(@"configuration.json"));
 
 var connString = (string)config["EventHubConfig"]["ConnectionString"];
 var hub = (string)config["EventHubConfig"]["Hub"];

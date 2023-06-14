@@ -1,0 +1,18 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ServiceBusConfig": {
+    "ConnectionString": "Endpoint=sb://copycloudbus.servicebus.windows.net/;SharedAccessKeyName=rootkey;SharedAccessKey=d1N6giJPPzDQFrO1FPK9H1JkjQxleAeBJ+ASbHj15AE=;EntityPath=projectsavequeue",
+    "Queue": "projectsavequeue"
+  },
+  // <-------------------------- Document storage ------------------------------>
+  "Azure": {
+    "ConnectionString": "DefaultEndpointsProtocol=https;AccountName=copycloudstorage;AccountKey=HGFUA23jI91sVrYbh9b1eDZ2upDyZGnEhEw5syEHVVf6AiaHE4hcbP4lgyeZeD661sQ/rGGXWfMb+ASt8v+rLg==;EndpointSuffix=core.windows.net",
+    "Container": "documents"
+  }
+}
