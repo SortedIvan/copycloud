@@ -1,6 +1,7 @@
 ﻿using Azure.Messaging.ServiceBus;
 using Azure.Storage.Blobs;
 using Newtonsoft.Json;
+using projectservice.Data;
 using projectservice.Utility;
 
 
@@ -34,7 +35,8 @@ namespace projectservice.Services
         {
             // 1) Check if the document exists
             // 2) Send a message to the document background app with the content and the projectid
-            
+
+
             try
             {
                 DocumentMessage documentMessage = new DocumentMessage

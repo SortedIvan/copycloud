@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace projectservice.Models
 {
@@ -16,9 +17,11 @@ namespace projectservice.Models
         [BsonElement("projectusers")]
         public List<string> ProjectUsers { get; set; } = new List<string>(); // The emails of joined users
 
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local, Representation = BsonType.String)]
         [BsonElement("projectcreationdate")]
         public DateTime CreationDate { get; set; }
 
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local, Representation = BsonType.String)]
         [BsonElement("projectlastupdated")]
         public DateTime LastUpdated { get; set; }
 
