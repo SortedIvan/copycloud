@@ -6,13 +6,20 @@
     }
   },
   "AllowedHosts": "*",
-  "ServiceBusConfig": {
-    "ConnectionString": "Endpoint=sb://copycloudbus.servicebus.windows.net/;SharedAccessKeyName=rootkey;SharedAccessKey=d1N6giJPPzDQFrO1FPK9H1JkjQxleAeBJ+ASbHj15AE=;EntityPath=projectsavequeue",
-    "Queue": "projectsavequeue"
+  "EmailConfig": {
+    "ConnectionString": "endpoint=https://copycloudcommunication.communication.azure.com/;accesskey=Ob9foVVf9GUT6h5ZIcuDdk9dkVUhb+8Z6SpRDhZh5RTH4a8aMiv8w6dYqNZtGer9RpSKHKhhLuvCMPLElM74Xg=="
   },
-  // <-------------------------- Document storage ------------------------------>
-  "Azure": {
+  "ServiceBusConfig": {
+    "ConnectionString": "Endpoint=sb://copycloudbus.servicebus.windows.net/;SharedAccessKeyName=rootkey;SharedAccessKey=xZ4U2apDRTsgiLv0WF0kkAHc3IhtCVSR9+ASbDNFOvc=;EntityPath=projectemailqueue",
+    "EmailQueue": "projectemailqueue"
+  },
+  "EventHubConfig": {
+    "ConnectionString": "Endpoint=sb://copycloudevents.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=5ZS8k18DqNunyJRdMOByo6M4laCwt3Z8v+AEhHdEloY=",
+    "Hub": "copycloudprodhub",
+    "ConsumerGroup": "mailgroup"
+  },
+  "BlobStorage": {
     "ConnectionString": "DefaultEndpointsProtocol=https;AccountName=copycloudstorage;AccountKey=HGFUA23jI91sVrYbh9b1eDZ2upDyZGnEhEw5syEHVVf6AiaHE4hcbP4lgyeZeD661sQ/rGGXWfMb+ASt8v+rLg==;EndpointSuffix=core.windows.net",
-    "Container": "documents"
+    "Container": "offsetcontainer"
   }
 }
