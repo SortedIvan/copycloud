@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.Text;
 
-JObject config = JObject.Parse(File.ReadAllText(@"appsettings.json"));
+JObject config = JObject.Parse(File.ReadAllText(@"appsetting.json"));
 var connString = (string)config["ServiceBusConfig"]["ConnectionString"];
 string queue = "projectsavequeue";
 var blobConnection = (string)config["Azure"]["ConnectionString"];
