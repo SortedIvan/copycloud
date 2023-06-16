@@ -30,7 +30,7 @@ namespace projectservice.Controllers
         public async Task<string> CreateProjectInvite(ProjectInvitationDto inviteDto)
         {
             string invite = await this.projectInviteService.CreateProjectInvite(inviteDto);
-            return "http://localhost:8001/api/acceptinvitefromlink?token=" + invite;
+            return "https://copycloud.work/api/acceptinvitefromlink?token=" + invite;
         }
 
         [Authorize(Roles = "User")]
@@ -51,7 +51,7 @@ namespace projectservice.Controllers
 
             if (result.Item1)
             {
-                return Redirect($"http://localhost:8080/project/{result.Item2}");
+                return Redirect($"https://deft-stroopwafel-dec647.netlify.app/project/{result.Item2}");
             }
             return BadRequest("Something went wrong with the server");
         }
@@ -67,7 +67,7 @@ namespace projectservice.Controllers
 
             if (result.Item1)
             {
-                return Redirect($"http://localhost:8080/project/{result.Item2}");
+                return Redirect($"https://deft-stroopwafel-dec647.netlify.app/project/project/{result.Item2}");
             }
             return BadRequest(result);
         }

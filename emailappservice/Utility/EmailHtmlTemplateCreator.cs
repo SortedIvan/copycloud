@@ -8,7 +8,7 @@
             template = template.Replace("#user#", emailFrom);
             template = template.Replace("#date#", DateTime.Now.ToString());
             template = template.Replace("#project#", projectName + " | " + projectInviteId);
-            template = template.Replace("#href#", $"http://localhost:8001/api/acceptinvite?token={token}");
+            template = template.Replace("#href#", $"https://copycloud.work/api/acceptinvite?token={token}");
             return template;
         }
 
