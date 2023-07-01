@@ -9,3 +9,6 @@ Copycloud was a project revolved around learning enterprise software. It focused
 - In the below diagram, we can see 4 microservices, 2 of which have a NoSQL database and 2 being background services. All of the communication between services is done with the help of events and message queues.
 
 ![ArchitectureDiagram](https://github.com/SortedIvan/copycloud/assets/62967263/b1fe054b-2a76-4741-9125-a19850f80923)
+
+<h1> Deployment & scalability</h1>
+<p> The application was deployed using Azure kubernetes service, which allows for different services of the application to be scaled manually or to be specified a range of how many automatic instances should be spinned up in the case of high traffic. This is particularly important for services that have to deal with users (like the userservice) and documents within the application (documentservice). The pictures below highlight the most important parts of the deployment</p>
