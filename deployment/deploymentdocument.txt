@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: documentbgservice
+spec:
+  selector:
+    matchLabels:
+      app: documentbgservice
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: documentbgservice
+    spec:
+      containers:
+        - name: userservice
+          image: ivanovcharov/documentbgservice:70
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          env:
+            - name: ServiceBusConfig__ConnectionString
+              value: "Endpoint=sb://copycloudbus.servicebus.windows.net/;SharedAccessKeyName=rootkey;SharedAccessKey=d1N6giJPPzDQFrO1FPK9H1JkjQxleAeBJ+ASbHj15AE=;EntityPath=projectsavequeue"
+            - name: ServiceBusConfig__Queue
+              value: "projectsavequeue"
+            - name: Azure__ConnectionString
+              value: "DefaultEndpointsProtocol=https;AccountName=copycloudstorage;AccountKey=HGFUA23jI91sVrYbh9b1eDZ2upDyZGnEhEw5syEHVVf6AiaHE4hcbP4lgyeZeD661sQ/rGGXWfMb+ASt8v+rLg==;EndpointSuffix=core.windows.net"
+            - name: Azure__Container
+              value: "documents"
+      restartPolicy: Always

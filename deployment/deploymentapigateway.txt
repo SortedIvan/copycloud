@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apigateway
+spec:
+  selector:
+    matchLabels:
+      app: apigateway
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: apigateway
+    spec:
+      containers:
+        - name: apigateway
+          image: ivanovcharov/apigateway:66
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+      restartPolicy: Always
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: apigateway
+spec:
+  selector:
+    app: apigateway
+  ports:
+    - protocol: "TCP"
+      port: 80
+      targetPort: 80
+  type: LoadBalancer

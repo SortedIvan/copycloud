@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: projectservice
+spec:
+  selector:
+    matchLabels:
+      app: projectservice
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: projectservice
+    spec:
+      containers:
+        - name: projectservice
+          image: ivanovcharov/projectservice:66
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          env:
+            - name: FirebaseSettings__firebase_api_key
+              value: "AIzaSyCHIW7gTKmEBTS5EbO7-KAkk-q6p6rw0QU\r\n"
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secret/firebase-config.json
+            - name: ProjectDbSettings__ProjectDbCollection
+              value: "Projects"
+            - name: ProjectDbSettings__ProjectInviteDbCollection
+              value: "ProjectInvites"
+            - name: ProjectDbSettings__ProjectContentDbCollection
+              value: "ProjectContents"
+            - name: ProjectDbSettings__ProjectInviteLinkDbCollection
+              value: "ProjectInviteLinks"
+            - name: ProjectDbSettings__DatabaseName
+              value: "ProjectDb"
+            - name: ProjectDbSettings__ConnectionString
+              value: "mongodb+srv://copycloud:copycloudpw123@firstcluster.u36phlf.mongodb.net/?retryWrites=true&w=majority"
+            - name: ServiceBusConfig__ConnectionStringEmail
+              value: "Endpoint=sb://copycloudbus.servicebus.windows.net/;SharedAccessKeyName=rootkey;SharedAccessKey=xZ4U2apDRTsgiLv0WF0kkAHc3IhtCVSR9+ASbDNFOvc=;EntityPath=projectemailqueue"
+            - name: ServiceBusConfig__ConnectionStringDocument
+              value: "Endpoint=sb://copycloudbus.servicebus.windows.net/;SharedAccessKeyName=rootkey;SharedAccessKey=d1N6giJPPzDQFrO1FPK9H1JkjQxleAeBJ+ASbHj15AE=;EntityPath=projectsavequeue"
+            - name: BlobStorage__Container
+              value: "documents"
+            - name: BlobStorage__ConnectionString
+              value: "DefaultEndpointsProtocol=https;AccountName=copycloudstorage;AccountKey=HGFUA23jI91sVrYbh9b1eDZ2upDyZGnEhEw5syEHVVf6AiaHE4hcbP4lgyeZeD661sQ/rGGXWfMb+ASt8v+rLg==;EndpointSuffix=core.windows.net"
+            - name: EventHubConfig__ConnectionString
+              value: "Endpoint=sb://copycloudevents.servicebus.windows.net/;SharedAccessKeyName=key;SharedAccessKey=OpmB1JrssEEdGZIeAcLc+iOQSf/qWIVjD+AEhKDW/vY=;EntityPath=copycloudprodhub"
+            - name: EventHubConfig__Hub
+              value: "copycloudprodhub"
+            - name: EventHubConfig__ConsumerGroup
+              value: "mailgroup"
+            - name: EventHubConfig__ConsumerGroupProjectEvents
+              value: "projecteventsgroup"
+            - name: EventHubStorage__ConnectionString
+              value: "DefaultEndpointsProtocol=https;AccountName=copycloudstorage;AccountKey=HGFUA23jI91sVrYbh9b1eDZ2upDyZGnEhEw5syEHVVf6AiaHE4hcbP4lgyeZeD661sQ/rGGXWfMb+ASt8v+rLg==;EndpointSuffix=core.windows.net"
+            - name: EventHubStorage__ContainerProjectEvents
+              value: "projectevents"
+          volumeMounts:
+            - name: gcp-credentials-volume
+              mountPath: /var/secret
+              readOnly: true
+            - name: secrets
+              mountPath: /app/secrets
+              readOnly: true
+      volumes:
+        - name: secrets
+          secret:
+            secretName: projectsettings
+        - name: gcp-credentials-volume
+          secret:
+            secretName: gcp-credentials
+    restartPolicy: Always

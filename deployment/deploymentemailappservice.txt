@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: emailappservice
+spec:
+  selector:
+    matchLabels:
+      app: emailappservice
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: emailappservice
+    spec:
+      containers:
+        - name: emailappservice
+          image: ivanovcharov/emailappservice:70
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          env:
+            - name: EmailConfig__ConnectionString
+              value: "endpoint=https://copycloudcommunication.communication.azure.com/;accesskey=Ob9foVVf9GUT6h5ZIcuDdk9dkVUhb+8Z6SpRDhZh5RTH4a8aMiv8w6dYqNZtGer9RpSKHKhhLuvCMPLElM74Xg=="
+            - name: ServiceBusConfig__ConnectionString
+              value: "Endpoint=sb://copycloudbus.servicebus.windows.net/;SharedAccessKeyName=rootkey;SharedAccessKey=xZ4U2apDRTsgiLv0WF0kkAHc3IhtCVSR9+ASbDNFOvc=;EntityPath=projectemailqueue"
+            - name: ServiceBusConfig__EmailQueue
+              value: "projectemailqueue"
+            - name: EventHubConfig__ConnectionString
+              value: "Endpoint=sb://copycloudevents.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=5ZS8k18DqNunyJRdMOByo6M4laCwt3Z8v+AEhHdEloY="
+            - name: EventHubConfig__Hub
+              value: "copycloudprodhub"
+            - name: EventHubConfig__ConsumerGroup
+              value: "mailgroup"
+            - name: BlobStorage__ConnectionString
+              value: "DefaultEndpointsProtocol=https;AccountName=copycloudstorage;AccountKey=HGFUA23jI91sVrYbh9b1eDZ2upDyZGnEhEw5syEHVVf6AiaHE4hcbP4lgyeZeD661sQ/rGGXWfMb+ASt8v+rLg==;EndpointSuffix=core.windows.net"
+            - name: BlobStorage__Container
+              value: "offsetcontainer"
+      restartPolicy: Always
