@@ -3,4 +3,9 @@ Copycloud is a real time collaboration tool that allows marketing teams and prof
 
 Copycloud was a project revolved around learning enterprise software. It focused on creating scalable architecture (by using micro-services), utilizing cloud services for deployment, authentication, nosql storage and orchestration (kubernetes). This document includes some of the most important highlights of the application, as well as how the application looks like in a local development environment. It was formerly deployed and running by using Netlify and Azure Kubernetes Service, but is currently stopped due to changes in the application.
 
+<h2> Architecture Diagram </h2>
+<p> Copycloud uses a microservice architecture, where each unit of logic is split to a seperate service in order to make scalability and multiple deployments much more accessible. Furthemore, this allows for a higher level application of the SOLID principles and de-couples logic, improving code quality.</p>
 
+- In the below diagram, we can see 4 microservices, 2 of which have a NoSQL database and 2 being background services. All of the communication between services is done with the help of events and message queues.
+
+![ArchitectureDiagram](https://github.com/SortedIvan/copycloud/assets/62967263/b1fe054b-2a76-4741-9125-a19850f80923)
