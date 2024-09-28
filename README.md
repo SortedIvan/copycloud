@@ -6,7 +6,7 @@ Copycloud was a project revolved around learning enterprise software. It focused
 <h1> Architecture Diagram </h1>
 <p> Copycloud uses a microservice architecture, where each unit of logic is split to a seperate service in order to make scalability and multiple deployments much more accessible. Furthemore, this allows for a higher level application of the SOLID principles and de-couples logic, improving code quality.</p>
 
-- In the below diagram, we can see 4 microservices, 2 of which have a NoSQL database and 2 being background services. All of the communication between services is done with the help of events and message queues.
+- In the below diagram, we can see 4 microservices, 2 of which have a NoSQL database and 2 being background services. All of the communication between services is done with the help of events and message queues
 
 ![ArchitectureDiagram](https://github.com/SortedIvan/copycloud/assets/62967263/b1fe054b-2a76-4741-9125-a19850f80923)
 
